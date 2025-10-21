@@ -1,6 +1,6 @@
-# 🎮 Proyecto: Web Dinámica con APIs Públicas
+# 🎮 Web Dinámica con APIs Públicas
 
-Este es un proyecto para la materia de **[Aplicaciones de Internet]**.
+Este es un proyecto para la materia de **Aplicaciones de Internet**.
 
 El objetivo era construir un sitio web dinámico desde cero, conectándonos a una API pública para mostrar información en tiempo real. Nosotros elegimos hacer un sitio sobre videojuegos, aplicando lo que aprendimos de HTML, CSS, Bootstrap y JavaScript.
 
@@ -10,13 +10,13 @@ Para organizar mejor el trabajo en equipo y el código, dividimos el proyecto en
 
 * `index.html`: Es la página de inicio. Aquí mostramos una lista de los juegos más populares o mejor calificados del momento.
 * `detalle.html`: Cuando haces clic en un juego, te mandamos a esta página. Carga y muestra toda la información de *ese* juego en específico (descripción, plataformas, rating, galería de fotos, etc.).
-* `busqueda.html`: Esta página se encarga de mostrar los resultados cuando el usuario usa la barra de búsqueda del `navbar`.
+* `busqueda.html`: Esta página se encarga de mostrar los resultados cuando el usuario usa la barra de búsquedagt.
 
 ### 🛠️ Tecnologías Usadas
 
 * **HTML5** 
 * **CSS** 
-* **Bootstrap ** 
+* **Bootstrap** 
 * **JavaScript** 
 
 ### 🔌 API Utilizada
@@ -27,13 +27,13 @@ Usamos la **API de [RAWG.io](https://rawg.io/apidocs)**. Es una base de datos gi
 
 El diseño inicial y la planeación de las vistas las hicimos en Figma.
 
-* **Enlace al prototipo en Figma:** `[]`(En curso)
+* **Enlace al prototipo en Figma:** (En curso)
 
 ### 🚀 Sitio en vivo
 
 Puedes ver el proyecto funcionando aquí:
 
-* **Enlace al sitio desplegado:** `[]`(Proximamente)
+* **Enlace al sitio desplegado:** (Proximamente)
 
 ---
 
