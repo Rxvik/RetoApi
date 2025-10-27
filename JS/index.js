@@ -1,49 +1,73 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const apiKey = 'f8600f270c5a46cbbd3ee5e3324530c9';
+const API_KEY = 'f8600f270c5a46cbbd3ee5e3324530c9';
+const API_BASE = 'https://api.rawg.io/api/';
 
-  const gamesListContainer = document.querySelector('.products .list');
+const latestGamesContainer = document.querySelector('.products .list');
 
-  gamesListContainer.innerHTML = ''; 
+const init = async () => {
+    try {
+        const today = new Date();
+        const year = today.getFullYear();
+        const url = `${API_BASE}games?key=${API_KEY}&dates=${year}-01-01,${today.toISOString().split('T')[0]}&ordering=-released&page_size=3`;
+        
+        const data = await fetchJSON(url);
+        renderGameRow(data.results);
+        
+    } catch (err) {
+        console.error('Error al iniciar:', err);
+        latestGamesContainer.innerHTML = '<p>No se pudieron cargar los juegos. Intenta más tarde.</p>';
+    }
+};
 
-  const today = new Date();
-  const year = today.getFullYear();
-  const url = `https://api.rawg.io/api/games?key=${apiKey}&dates=${year}-01-01,${today.toISOString().split('T')[0]}&ordering=-released&page_size=3`;
+const renderGameRow = (games) => {
+    latestGamesContainer.innerHTML = '';
+    const row = document.createElement('div');
+    row.className = 'row';
 
-  fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Error HTTP: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log(data.results); 
-
-      const row = document.createElement('div');
-      row.className = 'row'; 
-
-      data.results.forEach(game => {
-
-        const gameCard = document.createElement('div');
-        gameCard.className = 'card'; 
-        gameCard.innerHTML = `
-          <div class="image-container">
-            <div class="image-2" style="background-image: url('${game.background_image}'); background-size: cover; background-position: center;">
-              <div class="tag"><div class="text-2">${game.rating}</div></div>
-              </div>
-          </div>
-          <div class="text-content">
-            <div class="title-8">${game.name}</div>
-            <p class="subtitle">${game.genres.map(g => g.name).join(', ')}</p>
-          </div>
-        `;
-        row.appendChild(gameCard);
-      });
-
-      gamesListContainer.appendChild(row);
-    })
-    .catch(error => {
-      console.error('Error al obtener los juegos:', error);
-      gamesListContainer.innerHTML = '<p>No se pudieron cargar los juegos. Intenta más tarde.</p>';
+    games.forEach(game => {
+        row.appendChild(createGameCard(game));
     });
-});
+
+    latestGamesContainer.appendChild(row);
+};
+
+const createGameCard = (game) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const imageUrl = game.background_image || 'https://via.placeholder.com/400x300?text=No+Imagen';
+    const genres = (game.genres || []).map(g => g.name).join(', ');
+
+    card.innerHTML = `
+        <div class="image-container">
+            <div class="image-2" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;">
+                <div class="tag"><div class="text-2">${game.rating || 'N/A'}</div></div>
+            </div>
+        </div>
+        <div class="text-content">
+            <div class="title-8">${escapeHTML(game.name)}</div>
+            <p class="subtitle">${escapeHTML(genres) || 'Sin géneros'}</p>
+        </div>
+    `;
+    
+    return card;
+};
+
+const fetchJSON = async (url) => {
+    const res = await fetch(url);
+    if (!res.ok) {
+        throw new Error(`Error al cargar datos (HTTP ${res.status}): ${url}`);
+    }
+    return await res.json();
+};
+
+const escapeHTML = (s) => {
+    return (s || "").replace(/[&<>"']/g, m => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[m]));
+};
+
+document.addEventListener('DOMContentLoaded', init);

@@ -87,6 +87,16 @@
   font-size: 14px;
   letter-spacing: 0;
   line-height: 20px;
+  border-radius: 6px;
+  border: 1px solid;
+  border-color: #0000001a;
+  padding: 8px;
+  background-color: white;
+  width: 100%;
+  max-width: 520px;
+  height: 40px;
+  display: flex;
+  align-items: center;
 }
 
 .page .ic-search {
@@ -277,11 +287,11 @@
   padding: 2px 4px;
   position: relative;
   flex: 0 0 auto;
-  background-color: #d8d8d880;
+  background-color: white;
   border-radius: 2px;
   overflow: hidden;
   border: 0.5px solid;
-  border-color: #0000001a;
+  border-color: white;
 }
 
 .page .label-text {
@@ -316,6 +326,9 @@
   gap: 12px;
   position: relative;
   flex: 0 0 auto;
+  cursor: pointer; 
+  background-color: white;
+  border-radius: 8px;
 }
 
 .page .seconday {
