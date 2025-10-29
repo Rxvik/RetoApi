@@ -12,18 +12,21 @@
     <div class="page">
       <header class="top-bar" role="banner">
         <div class="rectangle" aria-hidden="true">
+          <a href="/index.html">
             <img class="rectangle" src="assets/imagenes/LogoXH.png" alt="Logo" />
+          </a>
         </div>
         <h1 class="title">Catalogo de Juegos</h1>
+        
         <nav class="navigation" aria-label="Navegación principal">
           <a class="tab active" href="index.html">Inicio</a>
           <a class="tab" href="catalogo.html">Catalogo</a>
-          <form class="textfield" role="search" aria-label="Buscar">
-            <span class="text">Buscar</span>
+          
+            <input type="text" placeholder="Buscar Juego" id="buscador" class="textfield">
             <button class="ic-search" type="submit" aria-label="Buscar">
               <img class="shape" src="assets/imagenes/lupa.png" alt="Buscar" />
             </button>
-          </form>
+          
         </nav>
       </header>
       <main class="frame">
@@ -52,63 +55,28 @@
           </div>
         </div>
       </main>
+
       <div class="section-2">
         <div class="container-3">
           <div class="title-5">Descubre tu siguiente aventura</div>
           <p class="description-2">Explora una basta categoria de juegos seleccionados para ti.</p>
           <button class="button" type="button">
+            <a href="/catalogo.html">
             <div class="primary"><div class="title-2">Buscar Juegos</div></div>
+            </a>
           </button>
         </div>
-        <img class="vector" src="img/vector-200-4.svg" />
       </div>
+
       <div class="products">
         <div class="div-wrapper"><div class="title-6">Ultimos Lanzamientos</div></div>
         <div class="list">
           <div class="row">
-            <div class="card">
-              <div class="image-container">
-                <div class="image-2">
-                  <div class="title-7">Cover of Game A</div>
-                  <div class="tag"><div class="text-2">4.5</div></div>
-                  <img class="image-3" src="img/image-3.png" />
-                </div>
-              </div>
-              <div class="text-content">
-                <div class="title-8">Juego A</div>
-                <p class="subtitle">Una experiencia llena de accion.</p>
-              </div>
-            </div>
-            <div class="card">
-              <div class="image-container">
-                <div class="image-2">
-                  <div class="title-9">Cover of Game B</div>
-                  <div class="tag"><div class="text-2">4.8</div></div>
-                </div>
-                <img class="image-4" src="img/image-4.png" />
-              </div>
-              <div class="text-content">
-                <div class="title-8">Juego B</div>
-                <p class="subtitle">Una aventura apasionante a traves del cosmos.</p>
-              </div>
-            </div>
-            <div class="card">
-              <div class="image-container">
-                <div class="image-2">
-                  <div class="title-7">Cover of Game C</div>
-                  <div class="tag"><div class="text-2">4.2</div></div>
-                  <img class="image-5" src="img/image-5.png" />
-                </div>
-              </div>
-              <div class="text-content">
-                <div class="title-8">Juego C</div>
-                <p class="subtitle">Resuelve rompecabezas desafiantes para avanzar.</p>
-              </div>
-            </div>
+            <!-- Se muestran los Juegos-->
           </div>
         </div>
-        <img class="vector" src="img/vector-200-2.svg" />
       </div>
+
       <div class="reviews">
         <div class="container-4"><div class="title-10">Reseñas de Jugadores</div></div>
         <div class="list-2">
@@ -157,7 +125,6 @@
             </div>
           </div>
         </div>
-        <img class="vector" src="img/vector-200.svg" />
       </div>
       <footer class="container-5" role="contentinfo">
         <p class="title-13">© 2025 SA. de CV.</p>

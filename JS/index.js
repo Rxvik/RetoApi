@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const today = new Date();
   const year = today.getFullYear();
-  const url = `https://api.rawg.io/api/games?key=${apiKey}&dates=${year}-01-01,${today.toISOString().split('T')[0]}&ordering=-released&page_size=3`;
+  const url = `https://api.rawg.io/api/games?key=${apiKey}&dates=${year}-01-01,${today.toISOString().split('T')[0]}&ordering=-released&page_size=6`;
 
   fetch(url)
     .then(response => {
