@@ -1,49 +1,81 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const apiKey = 'f8600f270c5a46cbbd3ee5e3324530c9';
+  
+  const API_KEY = 'f8600f270c5a46cbbd3ee5e3324530c9';
+  const API_BASE = 'https://api.rawg.io/api';
+  
+  const rowsContainer = document.querySelector('.products .list');
+  const sectionTitle = document.querySelector('.products .title-6');
 
-  const gamesListContainer = document.querySelector('.products .list');
+  const init = async () => {
+    try {
+      const randomPage = Math.floor(Math.random() * 50) + 1;
+      const url = `${API_BASE}/games?key=${API_KEY}&page=${randomPage}&page_size=20&ordering=-rating`;
+      const gamesData = await fetchJSON(url);
+      
+      sectionTitle.textContent = "Juegos Populares";
+      renderRow(gamesData.results);
 
-  gamesListContainer.innerHTML = ''; 
+    } catch (err) {
+      rowsContainer.innerHTML = "<p>No se pudieron cargar los juegos.</p>";
+    }
+  };
 
-  const today = new Date();
-  const year = today.getFullYear();
-  const url = `https://api.rawg.io/api/games?key=${apiKey}&dates=${year}-01-01,${today.toISOString().split('T')[0]}&ordering=-released&page_size=6`;
+  const fetchJSON = async (url) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Error HTTP: ${res.status} al cargar ${url}`);
+    return await res.json();
+  };
 
-  fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Error HTTP: ${response.status}`);
+  const renderRow = (games) => {
+    rowsContainer.innerHTML = ''; 
+
+    if (!games || games.length === 0) {
+      return;
+    }
+    
+    games.forEach(game => {
+      if (game.background_image) {
+        rowsContainer.appendChild(posterCard(game));
       }
-      return response.json();
-    })
-    .then(data => {
-      console.log(data.results); 
-
-      const row = document.createElement('div');
-      row.className = 'row'; 
-
-      data.results.forEach(game => {
-
-        const gameCard = document.createElement('div');
-        gameCard.className = 'card'; 
-        gameCard.innerHTML = `
-          <div class="image-container">
-            <div class="image-2" style="background-image: url('${game.background_image}'); background-size: cover; background-position: center;">
-              <div class="tag"><div class="text-2">${game.rating}</div></div>
-              </div>
-          </div>
-          <div class="text-content">
-            <div class="title-8">${game.name}</div>
-            <p class="subtitle">${game.genres.map(g => g.name).join(', ')}</p>
-          </div>
-        `;
-        row.appendChild(gameCard);
-      });
-
-      gamesListContainer.appendChild(row);
-    })
-    .catch(error => {
-      console.error('Error al obtener los juegos:', error);
-      gamesListContainer.innerHTML = '<p>No se pudieron cargar los juegos. Intenta más tarde.</p>';
     });
+  };
+
+  const posterCard = (game) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    
+    const genres = (game.genres || []).map(g => g.name).slice(0, 3).join(', ');
+    const rating = game.rating || 'N/A';
+    
+    card.innerHTML = `
+      <div class="image-container">
+        <img class="image-3" src="${game.background_image}" alt="${escapeHTML(game.name)}">
+        <div class="tag"><div class="text-2">${rating}</div></div>
+      </div>
+      <div class="text-content">
+        <div class="title-8">${escapeHTML(game.name)}</div>
+        <p class="subtitle">${escapeHTML(genres)}</p>
+      </div>
+    `;
+
+    card.addEventListener('click', () => openDetail(game.slug));
+    return card;
+  };
+  
+  const openDetail = (gameSlug) => {
+    window.location.href = `detalle.html?slug=${gameSlug}`;
+  };
+
+  const escapeHTML = (s) => {
+    return (s || "").replace(/[&<>"']/g, m => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[m]));
+  };
+
+  init();
+
 });
