@@ -1077,7 +1077,8 @@
 .page .list, 
 .page .list-pagination,
 .page .reviews .list-2 {
-  max-width: 1200px; 
+  /* Allow wider lists so platform rows can show more/larger cards */
+  max-width: 1600px; 
   margin-left: auto;  
   margin-right: auto; 
   width: 100%;      
@@ -1098,9 +1099,11 @@
 }
 
 .page .products .list .card {
-  flex: 0 0 300px; /* fixed card width so multiple cards are visible */
-  min-width: 260px;
-  max-width: 340px;
+  /* Make cards take approx 1/5 of the container so five are visible side-by-side */
+  flex: 0 0 22%;
+  min-width: 210px;
+  max-width: 300px;
+  box-sizing: border-box;
   scroll-snap-align: start;
 }
 
@@ -1162,6 +1165,10 @@
   gap: 20px;
   width: 100%;
   height: auto; 
+  /* Constrain and center the horizontal list so it can be wider than the page's usual content */
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .page .products .list .card {

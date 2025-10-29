@@ -19,12 +19,10 @@
                 <nav class="navigation" aria-label="Navegación principal">
                     <a class="tab" href="index.html">Inicio</a>
                     <a class="tab active" href="catalogo.html">Catalogo</a>
-                    <form class="textfield" role="search" aria-label="Buscar">
-                        <span class="text">Buscar</span>
-                        <button class="ic-search" type="submit" aria-label="Buscar">
-                            <img class="shape" src="assets/imagenes/lupa.png" alt="Buscar" />
-                        </button>
-                    </form>
+                    <input type="text" placeholder="Buscar Juego" id="buscador" class="textfield">
+            <button class="ic-search" type="submit" aria-label="Buscar">
+              <img class="shape" src="assets/imagenes/lupa.png" alt="Buscar" />
+            </button>
                 </nav>
             </header>
 
@@ -96,107 +94,30 @@
             </main>
 
 
-            <div class="products products--catalog">
-                <div class="div-wrapper"><div class="title-6">Juegos Disponibles</div></div>
-                <div class="list">
-                    <div class="row">
-                        <div class="card">
-                            <div class="image-container">
-                                <div class="image-2" style="background-image: url('img/juego-a.png'); background-size: cover;"> <div class="tag"><div class="text-2">4.8</div></div>
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <div class="title-8">Juego A</div>
-                                <p class="subtitle">XBOX</p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="image-container">
-                                <div class="image-2" style="background-image: url('img/juego-b.png'); background-size: cover;">
-                                <div class="tag"><div class="text-2">4.5</div></div>
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <div class="title-8">Juego B</div>
-                                <p class="subtitle">PS5</p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="image-container">
-                                <div class="image-2" style="background-image: url('img/juego-c.png'); background-size: cover;">
-                                <div class="tag"><div class="text-2">4.2</div></div>
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <div class="title-8">Juego C</div>
-                                <p class="subtitle">PC</p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="image-container">
-                                <div class="image-2">
-                                    <div class="tag"><div class="text-2">4.1</div></div>
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <div class="title-8">Juego D</div>
-                                <p class="subtitle">Nintendo Switch</p>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Multiple product rows: Novedades/Filtrado, PC, PS5, Nintendo Switch, XBOX -->
+            <div class="products products--catalog" data-section="novedades">
+                <div class="div-wrapper"><div class="title-6">Novedades/Filtrado</div></div>
+                <div class="list" id="list-novedades"></div>
+            </div>
 
-                    <div class="row">
-                        <div class="card">
-                        <div class="image-container">
-                            <div class="image-2" style="background-image: url('img/juego-d.png'); background-size: cover;">
-                            <div class="tag"><div class="text-2">4.9</div></div>
-                            </div>
-                        </div>
+            <div class="products products--catalog" data-section="pc">
+                <div class="div-wrapper"><div class="title-6">PC</div></div>
+                <div class="list" id="list-pc"></div>
+            </div>
 
-                        <div class="text-content">
-                            <div class="title-8">Juego E</div>
-                            <p class="subtitle">Nintendo Switch</p>
-                        </div>
-                        </div>
+            <div class="products products--catalog" data-section="ps5">
+                <div class="div-wrapper"><div class="title-6">PS5</div></div>
+                <div class="list" id="list-ps5"></div>
+            </div>
 
-                        <div class="card">
-                        <div class="image-container">
-                            <div class="image-2" style="background-image: url('img/juego-e.png'); background-size: cover;">
-                            <div class="tag"><div class="text-2">4.3</div></div>
-                            </div>
-                        </div>
+            <div class="products products--catalog" data-section="nintendo">
+                <div class="div-wrapper"><div class="title-6">Nintendo Switch</div></div>
+                <div class="list" id="list-nintendo"></div>
+            </div>
 
-                        <div class="text-content">
-                            <div class="title-8">Juego F</div>
-                            <p class="subtitle">XBOX</p>
-                        </div>
-                        </div>
-
-                        <div class="card">
-                        <div class="image-container">
-                            <div class="image-2" style="background-image: url('img/juego-f.png'); background-size: cover;">
-                            <div class="tag"><div class="text-2">4.7</div></div>
-                            </div>
-                        </div>
-
-                        <div class="text-content">
-                            <div class="title-8">Juego G</div>
-                            <p class="subtitle">PS5</p>
-                        </div>
-                        </div>
-                        <div class="card">
-                            <div class="image-container">
-                                <div class="image-2">
-                                    <div class="tag"><div class="text-2">4.0</div></div>
-                                </div>
-                            </div>
-                            <div class="text-content">
-                                <div class="title-8">Juego H</div>
-                                <p class="subtitle">PC</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="products products--catalog" data-section="xbox">
+                <div class="div-wrapper"><div class="title-6">XBOX</div></div>
+                <div class="list" id="list-xbox"></div>
             </div>
 
             <div class="pagination-section">
@@ -232,4 +153,5 @@
         </div>
     </body>
 
+    <script src="JS/catalogo.js" defer></script>
 </html>
