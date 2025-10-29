@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
+    <title>Catálogo de Juegos — Inicio</title>
+    <meta name="description" content="Explora lanzamientos y reseñas de videojuegos. Encuentra tu próxima aventura y consulta opiniones de jugadores." />
     <link rel="stylesheet" href="CSS/global.css" />
     <link rel="stylesheet" href="CSS/style.css" />
   </head>
   <body>
     <div class="page">
-      <div class="top-bar">
-        <div class="rectangle">
-            <img class="rectangle" src="assets/imagenes/LogoXH.png" />
+      <header class="top-bar" role="banner">
+        <div class="rectangle" aria-hidden="true">
+            <img class="rectangle" src="assets/imagenes/LogoXH.png" alt="Logo" />
         </div>
         <div class="title">Catalogo de Juegos</div>
         <div class="navigation">
           <div class="tab">Inicio</div>
           <div class="tab">Catalogo</div>
           <div class="textfield">
-            <div>
-              <input class="text" type="text" placeholder="Buscar">
-            </div>
+            <div class="text">Buscar</div>
             <div class="ic-search"><img class="shape" src="assets/imagenes/lupa.png" /></div>
           </div>
         </div>
@@ -34,7 +34,7 @@
               </p>
             </div>
             <div class="section">
-              <div class="avatar"><img class="image" src="assets/imagenes/FedeObo.jpg" /></div>
+              <div class="avatar"><img class="image" src="assets/imagenes/FedeObo.jpg" alt="Avatar de usuario" /></div>
               <div class="container-2">
                 <div class="title-3">Vitor007</div>
                 <div class="selection">
@@ -49,12 +49,12 @@
             <img class="img" src="assets/imagenes/LogoXH.png" />
           </div>
         </div>
-      </div>
+      </main>
       <div class="section-2">
         <div class="container-3">
           <div class="title-5">Descubre tu siguiente aventura</div>
           <p class="description-2">Explora una basta categoria de juegos seleccionados para ti.</p>
-          <button class="button">
+          <button class="button" type="button">
             <div class="primary"><div class="title-2">Buscar Juegos</div></div>
           </button>
         </div>
@@ -157,15 +157,13 @@
         </div>
         <img class="vector" src="img/vector-200.svg" />
       </div>
-      <div class="container-5">
+      <footer class="container-5" role="contentinfo">
         <p class="title-13">© 2025 SA. de CV.</p>
         <div class="title-14">Politicas de Privacidad</div>
         <div class="title-15">Terminos de Servicio</div>
         <div class="title-16">Contactanos</div>
-      </div>
+      </footer>
     </div>
-
-    <div class="slice-wrapper"><img class="slice" src="img/slice-2.svg" /></div>
     <script src="js/index.js"></script>
   </body>
 </html>
