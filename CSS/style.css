@@ -95,8 +95,8 @@
 
 .page .ic-search {
   position: relative;
-  width: 20px;
-  height: 20px;
+  width: 50px;
+  height: 30px;
   aspect-ratio: 1;
 }
 
@@ -765,8 +765,6 @@
   background-size: 100% 100%;
 }
 
-.page .frame-3 { background-image: url(./img/vector-2.svg); }
-
 .page .title-12 {
   position: relative;
   align-self: stretch;
@@ -784,12 +782,6 @@
   line-clamp: 3;
   -webkit-box-orient: vertical;
 }
-
-.page .frame-4 { background-image: url(./img/vector-3.svg); }
-
-.page .frame-5 { background-image: url(./img/vector.svg); }
-
-.page .frame-6 { background-image: url(./img/vector-4.svg); }
 
 .page .container-5 {
   display: inline-flex;
@@ -1076,6 +1068,27 @@
   margin-left: auto;  
   margin-right: auto; 
   width: 100%;      
+}
+
+/* Make the products list a horizontally scrollable row and keep cards fixed-width */
+.page .products .list {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 12px; /* space for potential scrollbar */
+}
+
+.page .products .list .row {
+  flex-wrap: nowrap; /* keep items in a single horizontal row */
+  gap: 16px; /* smaller gap for horizontal layout */
+}
+
+.page .products .list .card {
+  flex: 0 0 300px; /* fixed card width so multiple cards are visible */
+  min-width: 260px;
+  max-width: 340px;
+  scroll-snap-align: start;
 }
 
 .page .products.products--catalog .list .row {
