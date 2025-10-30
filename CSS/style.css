@@ -105,9 +105,10 @@
 
 .page .ic-search {
   position: relative;
-  width: 50px;
+  width: 30px;
   height: 30px;
-  aspect-ratio: 1;
+  border-radius: none;
+  border-color: white;
 }
 
 .page .shape {
@@ -1187,3 +1188,63 @@
   object-fit: cover;
   display: block;
 }
+
+.user-info-header {
+  display: flex;
+  align-items: center;
+  gap: 12px; 
+  margin-left: 20px; 
+}
+
+.header-avatar img {
+  width: 40px;  
+  height: 40px;
+  border-radius: 50%; 
+  object-fit: cover; 
+}
+
+.header-username {
+  font-family: "Roboto-Medium", Helvetica;
+  font-weight: 500;
+  color: #000000;
+  font-size: 16px;
+  white-space: nowrap; 
+}
+
+.header-logout-btn {
+  all: unset; 
+  box-sizing: border-box;
+  padding: 8px 12px;
+  font-family: "Roboto-Medium", Helvetica;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.header-logout-btn:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.header-login-btn {
+  all: unset; 
+  box-sizing: border-box;
+  padding: 8px 12px;
+  font-family: "Roboto-Medium", Helvetica;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.header-login-btn:hover {
+  background-color: white;
+}
+
