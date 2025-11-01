@@ -43,83 +43,81 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Almacenar el id para usarlo despues para el modal
     card.dataset.gameId = game.id
-    card.addEventListener('click', (e) => {
-      if (e.target && (e.target.tagName === 'A' || e.target.closest('.btn-store'))) return
-      showGameModal(game.id, game.name)
-    })
+    // make card keyboard-accessible and open modal on click or Enter/Space
+    card.tabIndex = 0
+    const openIfAllowed = (e) => {
+      if (e && e.type === 'click') {
+        if (e.target && (e.target.tagName === 'A' || e.target.closest('.btn-store'))) return;
+        showGameModal(game.id, game.name)
+      } else if (e && e.type === 'keydown') {
+        if (e.key === 'Enter' || e.key === ' ') {
+          showGameModal(game.id, game.name)
+        }
+      }
+    }
+    card.addEventListener('click', openIfAllowed)
+    card.addEventListener('keydown', openIfAllowed)
 
     return card;
   }
 
   
   const showGameModal = async (gameId, fallbackName) => {
-    // Crear overlay y modal base
-    const overlay = document.createElement('div')
-    overlay.className = 'game-modal-overlay'
+    // Use the Bootstrap modal markup present in catalogo.html
+    const modalElement = document.getElementById('gameDetailModal');
+    if (!modalElement) {
+      console.warn('Bootstrap modal element not found');
+      return;
+    }
 
-    const modal = document.createElement('div')
-    modal.className = 'game-modal'
+    const bsModal = new bootstrap.Modal(modalElement);
+    const modalTitle = document.getElementById('modal-game-title');
+    const modalBody = document.getElementById('modal-game-body');
 
-    // Contenido inicial (spinner/texto mientras se carga)
-    modal.innerHTML = `
-      <div class="modal-left"><div class="modal-image-placeholder">Cargando imagen...</div></div>
-      <div class="modal-right"><div class="modal-loading">Cargando detalles...</div></div>
-      <button class="modal-close" aria-label="Cerrar">❌</button>
-    `;
+    // show loading state
+    modalTitle.textContent = 'Cargando...';
+    modalBody.innerHTML = `
+      <div class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>`;
 
-    overlay.appendChild(modal)
-    document.body.appendChild(overlay)
+    bsModal.show();
 
-    // Cerrar modal al clicar overlay o botón
-    const close = () => { overlay.remove(); }
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); })
-    modal.querySelector('.modal-close').addEventListener('click', close)
-
-    // Obtenemos detalles del juego desde la API
     try {
-      const url = `${API_BASE}/games/${gameId}?key=${API_KEY}`
-      const data = await fetchJSON(url)
+      const url = `${API_BASE}/games/${gameId}?key=${API_KEY}`;
+      const data = await fetchJSON(url);
 
-      // Imagen del Juego
-      const imgSrc = data.background_image || data.background_image_additional || ''
-      const left = modal.querySelector('.modal-left')
-      left.innerHTML = `<img src="${imgSrc}" alt="${escapeHTML(data.name || fallbackName || '')}" class="modal-image">`
+      const imgSrc = data.background_image || data.background_image_additional || '';
+      const synopsis = data.description_raw || (data.description ? data.description.replace(/<[^>]+>/g, '') : 'Sin descripción.');
+      const platforms = (data.platforms || []).map(p => (p.platform && p.platform.name) || p.name).filter(Boolean).join(', ');
+      const rating = data.rating || 'N/A';
 
-      // Información del Juego: título, sinopsis, plataformas y calificación
-      const platforms = (data.platforms || []).map(p => (p.platform && p.platform.name) || p.name).filter(Boolean).join(', ')
-      const rating = data.rating || 'N/A'
-      const synopsis = data.description_raw || (data.description ? data.description.replace(/<[^>]+>/g, '') : 'Sin descripción.')
-
-      // Estos botones solo aparecen si el juego esta en la tienda 
-      const stores = (data.stores || []).map(s => (s.store && s.store.name) || s.name).filter(Boolean).map(s => s.toLowerCase())
-
-      const storeButtons = [];
-      const nameEncoded = encodeURIComponent(data.name || fallbackName || '')
-      if (stores.some(s => s.includes('steam'))) {
-        storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://store.steampowered.com/search/?term=${nameEncoded}">Ver en Steam</a>`)
-      }
-      if (stores.some(s => s.includes('epic'))) {
-        storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://www.epicgames.com/store/es-ES/browse?q=${nameEncoded}">Ver en Epic Games</a>`)
-      }
-      if (stores.some(s => s.includes('microsoft') || s.includes('xbox'))) {
-        storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://www.microsoft.com/search?q=${nameEncoded}">Ver en Microsoft Store</a>`)
-      }
-
-      const rightHtml = `
-        <h2 class="modal-title">${escapeHTML(data.name || fallbackName || '')}</h2>
-        <p class="modal-synopsis">${escapeHTML(synopsis)}</p>
-        <p class="modal-meta"><strong> 🖥️🎮Plataformas:</strong> ${escapeHTML(platforms || 'No disponible')}</p>
-        <p class="modal-meta"><strong> ⭐ Calificación:</strong> ${escapeHTML(String(rating))}</p>
-        <div class="modal-actions">${storeButtons.join('')}</div>
+      modalTitle.textContent = data.name || fallbackName || '';
+      modalBody.innerHTML = `
+        <img src="${imgSrc}" class="img-fluid mb-3 modal-game-image" alt="${escapeHTML(data.name || fallbackName || '')}">
+        <p>${escapeHTML(synopsis)}</p>
       `;
 
-      const right = modal.querySelector('.modal-right')
-      right.innerHTML = rightHtml
+      // add store buttons if available
+      const stores = (data.stores || []).map(s => (s.store && s.store.name) || s.name).filter(Boolean).map(s => s.toLowerCase());
+      const storeButtons = [];
+      const nameEncoded = encodeURIComponent(data.name || fallbackName || '');
+      if (stores.some(s => s.includes('steam'))) storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://store.steampowered.com/search/?term=${nameEncoded}">Ver en Steam</a>`);
+      if (stores.some(s => s.includes('epic'))) storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://www.epicgames.com/store/es-ES/browse?q=${nameEncoded}">Ver en Epic Games</a>`);
+      if (stores.some(s => s.includes('microsoft') || s.includes('xbox'))) storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://www.microsoft.com/search?q=${nameEncoded}">Ver en Microsoft Store</a>`);
+
+      if (storeButtons.length) {
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'modal-actions mt-3';
+        actionsDiv.innerHTML = storeButtons.join('');
+        modalBody.appendChild(actionsDiv);
+      }
 
     } catch (err) {
-      console.error('Error cargando detalle del juego', err)
-      const right = modal.querySelector('.modal-right')
-      right.innerHTML = `<p>Error cargando detalles del juego.</p>`
+      console.error('Error cargando detalle del juego', err);
+      modalBody.innerHTML = `<p>Error cargando detalles del juego.</p>`;
     }
   }
 
