@@ -113,6 +113,68 @@
     return values.join(', ');
   }
 
+  // Formatear descripción en párrafos y con toggle "Ver más"
+  function escapeHTML(s){
+    return (s || "").replace(/[&<>"']/g, m => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[m]));
+  }
+
+  function splitDescriptionIntoParagraphs(text){
+    if (!text) return [];
+    const t = String(text).replace(/\r\n?/g, '\n').trim();
+    if (!t) return [];
+    // Primero intenta por doble salto de línea (párrafos reales)
+    let paras = t.split(/\n{2,}/).map(s => s.trim()).filter(Boolean);
+    if (paras.length > 1) return paras;
+    // Si es un bloque largo sin saltos, agrupar por oraciones (~3 por párrafo)
+    const sentences = t.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
+    if (sentences.length <= 3) return [t];
+    const grouped = [];
+    for (let i = 0; i < sentences.length; i += 3){
+      grouped.push(sentences.slice(i, i+3).join(' '));
+    }
+    return grouped;
+  }
+
+  function buildParagraphHTML(paras){
+    return paras.map(p => `<p style="margin: 0 0 10px;">${escapeHTML(p)}</p>`).join('');
+  }
+
+  function renderDescription(text){
+    const host = document.getElementById('game-description');
+    if (!host) return;
+    const paras = splitDescriptionIntoParagraphs(text);
+    if (!paras.length){ host.innerHTML = '<span class="text-muted">Sin descripción disponible.</span>'; return; }
+
+    const MAX_PREVIEW_PARAS = 3;
+    const isLong = paras.length > MAX_PREVIEW_PARAS || (paras.join(' ').length > 500);
+    if (!isLong){
+      host.innerHTML = buildParagraphHTML(paras);
+      return;
+    }
+
+    const preview = paras.slice(0, MAX_PREVIEW_PARAS);
+    const fullHTML = buildParagraphHTML(paras);
+    const previewHTML = buildParagraphHTML(preview) + `<button class="desc-toggle" type="button" style="margin-top:6px; font-size:13px; color:#93c5fd; background:none; border:none; padding:0; cursor:pointer;">Ver más</button>`;
+
+    host.innerHTML = previewHTML;
+    const btn = host.querySelector('.desc-toggle');
+    if (btn){
+      let expanded = false;
+      btn.addEventListener('click', ()=>{
+        expanded = !expanded;
+        if (expanded){
+          host.innerHTML = fullHTML + `<button class=\"desc-toggle\" type=\"button\" style=\"margin-top:6px; font-size:13px; color:#93c5fd; background:none; border:none; padding:0; cursor:pointer;\">Ver menos</button>`;
+        } else {
+          host.innerHTML = previewHTML;
+        }
+        const newBtn = host.querySelector('.desc-toggle');
+        if (newBtn) newBtn.addEventListener('click', btn.onclick);
+      });
+    }
+  }
+
   function renderGalleryRail(container, urls){
     container.innerHTML = '';
     if (!urls || !urls.length) {
@@ -463,7 +525,7 @@
 
     // Render básico
     $('#game-title').textContent = data.title || '—';
-    $('#game-description').textContent = data.description || '';
+  renderDescription(data.description || '');
     const cover = $('#game-cover');
     // Cover: usar la imagen del banner (fondo principal) para mantener consistencia
     if (data.banner) cover.src = data.banner;
