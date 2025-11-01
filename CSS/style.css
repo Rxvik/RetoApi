@@ -105,9 +105,10 @@
 
 .page .ic-search {
   position: relative;
-  width: 50px;
+  width: 30px;
   height: 30px;
-  aspect-ratio: 1;
+  border-radius: none;
+  border-color: white;
 }
 
 .page .shape {
@@ -1188,57 +1189,62 @@
   display: block;
 }
 
-/* Modal de detalle del juego */
-.game-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
+.user-info-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  padding: 20px;
+  gap: 12px; 
+  margin-left: 20px; 
 }
-.game-modal {
-  background: #fff;
-  width: min(1100px, 96%);
-  max-height: 90vh;
-  overflow: auto;
-  display: flex;
-  gap: 24px;
-  border-radius: 8px;
-  position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-.game-modal .modal-left {
-  flex: 1 1 45%;
-  min-width: 260px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f6f6f6;
-}
-.game-modal .modal-left .modal-image {
-  width: 100%;
-  max-height: 80vh;
-  object-fit: cover;
-  display: block;
-}
-.game-modal .modal-right {
-  flex: 1 1 55%;
-  padding: 20px 24px;
-  overflow: auto;
-}
-.modal-title { font-size: 22px; margin: 0 0 12px 0; }
-.modal-synopsis { color: #333; margin-bottom: 12px; white-space: pre-wrap; }
-.modal-meta { color: #444; margin-bottom: 8px; }
-.modal-actions { margin-top: 12px; display:flex; gap:12px; flex-wrap:wrap; }
-.btn-store { background:#111; color:#fff; padding:8px 12px; border-radius:6px; text-decoration:none; }
-.btn-store:hover { opacity:0.9 }
-.modal-close { position: absolute; right: 8px; top: 8px; background: transparent; border: none; font-size: 20px; cursor: pointer; }
 
-@media (max-width: 800px) {
-  .game-modal { flex-direction: column; }
-  .game-modal .modal-left, .game-modal .modal-right { flex: unset; width: 100%; }
-  .game-modal .modal-left .modal-image { max-height: 40vh; }
+.header-avatar img {
+  width: 40px;  
+  height: 40px;
+  border-radius: 50%; 
+  object-fit: cover; 
 }
+
+.header-username {
+  font-family: "Roboto-Medium", Helvetica;
+  font-weight: 500;
+  color: #000000;
+  font-size: 16px;
+  white-space: nowrap; 
+}
+
+.header-logout-btn {
+  all: unset; 
+  box-sizing: border-box;
+  padding: 8px 12px;
+  font-family: "Roboto-Medium", Helvetica;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.header-logout-btn:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.header-login-btn {
+  all: unset; 
+  box-sizing: border-box;
+  padding: 8px 12px;
+  font-family: "Roboto-Medium", Helvetica;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.header-login-btn:hover {
+  background-color: white;
+}
+
