@@ -9,7 +9,7 @@ El objetivo era construir un sitio web dinámico desde cero, conectándonos a un
 Para organizar mejor el trabajo en equipo y el código, dividimos el proyecto en 3 archivos (páginas) principales:
 
 * `index.html`: Es la página de inicio. Aquí mostramos una lista de los juegos más populares o mejor calificados del momento.
-* `detalle.html`: Cuando haces clic en un juego, te mandamos a esta página. Carga y muestra toda la información de *ese* juego en específico (descripción, plataformas, rating, galería de fotos, etc.).
+* `catalogo.html`: Cuando haces clic en un juego, te mandamos a esta página. Carga y muestra toda la información de *ese* juego en específico (descripción, plataformas, rating, galería de fotos, etc.).
 * `busqueda.html`: Esta página se encarga de mostrar los resultados cuando el usuario usa la barra de búsquedagt.
 
 ### 🛠️ Tecnologías Usadas
