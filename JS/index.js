@@ -135,6 +135,12 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>`;
     
+    // Limpiamos botones de tiendas anteriores (por si acaso)
+    const modalFooter = modalElement.querySelector('.modal-footer');
+    if (modalFooter) {
+      modalFooter.querySelectorAll('.btn-store').forEach(btn => btn.remove());
+    }
+    
     gameModal.show();
 
     try {
@@ -146,6 +152,35 @@ document.addEventListener('DOMContentLoaded', () => {
         <img src="${gameDetails.background_image}" class="img-fluid mb-3 modal-game-image" alt="${escapeHTML(gameDetails.name)}">
         <p>${escapeHTML(gameDetails.description_raw)}</p>
       `;
+
+      // --- INICIO: Bloque de botones de tiendas ---
+      if (modalFooter) {
+        // 2. Buscamos el botón de "Cerrar" para insertar antes de él
+        const closeButton = modalFooter.querySelector('button[data-bs-dismiss="modal"]');
+        
+        // 3. Obtenemos la info de las tiendas desde la API
+        const stores = (gameDetails.stores || []).map(s => (s.store && s.store.name) || s.name).filter(Boolean).map(s => s.toLowerCase());
+        const storeButtons = [];
+        const nameEncoded = encodeURIComponent(gameDetails.name || '');
+
+        // 4. Creamos los botones (usando clases de Bootstrap 'btn')
+        if (stores.some(s => s.includes('steam'))) {
+          storeButtons.push(`<a class="btn btn-primary btn-store" target="_blank" rel="noopener" href="https://store.steampowered.com/search/?term=${nameEncoded}">Ver en Steam</a>`);
+        }
+        if (stores.some(s => s.includes('epic'))) {
+          storeButtons.push(`<a class="btn btn-success btn-store" target="_blank" rel="noopener" href="https://www.epicgames.com/store/es-ES/browse?q=${nameEncoded}">Ver en Epic</a>`);
+        }
+        if (stores.some(s => s.includes('microsoft') || s.includes('xbox'))) {
+          storeButtons.push(`<a class="btn btn-info btn-store" target="_blank" rel="noopener" href="https://www.microsoft.com/search?q=${nameEncoded}">Ver en Microsoft</a>`);
+        }
+
+        // 5. Insertamos los botones nuevos en el footer
+        if (storeButtons.length > 0 && closeButton) {
+          // Insertamos cada botón (como HTML) antes del botón de cerrar
+          closeButton.insertAdjacentHTML('beforebegin', storeButtons.join(''));
+        }
+      }
+      // --- FIN: Bloque de botones de tiendas ---
 
     } catch (err) {
       console.error(err);

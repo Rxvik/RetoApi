@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bsModal = new bootstrap.Modal(modalElement);
     const modalTitle = document.getElementById('modal-game-title');
     const modalBody = document.getElementById('modal-game-body');
+    const modalFooter = modalElement.querySelector('.modal-footer');
 
     // show loading state
     modalTitle.textContent = 'Cargando...';
@@ -82,6 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>`;
+      
+    // Limpiamos botones de tiendas anteriores
+    if (modalFooter) {
+      modalFooter.querySelectorAll('.btn-store').forEach(btn => btn.remove());
+    }
 
     bsModal.show();
 
@@ -100,20 +106,34 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>${escapeHTML(synopsis)}</p>
       `;
 
-      // add store buttons if available
-      const stores = (data.stores || []).map(s => (s.store && s.store.name) || s.name).filter(Boolean).map(s => s.toLowerCase());
-      const storeButtons = [];
-      const nameEncoded = encodeURIComponent(data.name || fallbackName || '');
-      if (stores.some(s => s.includes('steam'))) storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://store.steampowered.com/search/?term=${nameEncoded}">Ver en Steam</a>`);
-      if (stores.some(s => s.includes('epic'))) storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://www.epicgames.com/store/es-ES/browse?q=${nameEncoded}">Ver en Epic Games</a>`);
-      if (stores.some(s => s.includes('microsoft') || s.includes('xbox'))) storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://www.microsoft.com/search?q=${nameEncoded}">Ver en Microsoft Store</a>`);
+      // --- INICIO: Bloque de botones de tiendas ---
+      if (modalFooter) {
+        // 2. Buscamos el botón de "Cerrar" para insertar antes de él
+        const closeButton = modalFooter.querySelector('button[data-bs-dismiss="modal"]');
+        
+        // 3. Obtenemos la info de las tiendas desde la API
+        const stores = (data.stores || []).map(s => (s.store && s.store.name) || s.name).filter(Boolean).map(s => s.toLowerCase());
+        const storeButtons = [];
+        const nameEncoded = encodeURIComponent(data.name || fallbackName || '');
 
-      if (storeButtons.length) {
-        const actionsDiv = document.createElement('div');
-        actionsDiv.className = 'modal-actions mt-3';
-        actionsDiv.innerHTML = storeButtons.join('');
-        modalBody.appendChild(actionsDiv);
+        // 4. Creamos los botones (usando clases de Bootstrap 'btn')
+        if (stores.some(s => s.includes('steam'))) {
+          storeButtons.push(`<a class="btn btn-primary btn-store" target="_blank" rel="noopener" href="https://store.steampowered.com/search/?term=${nameEncoded}">Ver en Steam</a>`);
+        }
+        if (stores.some(s => s.includes('epic'))) {
+          storeButtons.push(`<a class="btn btn-success btn-store" target="_blank" rel="noopener" href="https://www.epicgames.com/store/es-ES/browse?q=${nameEncoded}">Ver en Epic</a>`);
+        }
+        if (stores.some(s => s.includes('microsoft') || s.includes('xbox'))) {
+          storeButtons.push(`<a class="btn btn-info btn-store" target="_blank" rel="noopener" href="https://www.microsoft.com/search?q=${nameEncoded}">Ver en Microsoft</a>`);
+        }
+
+        // 5. Insertamos los botones nuevos en el footer
+        if (storeButtons.length > 0 && closeButton) {
+          // Insertamos cada botón (como HTML) antes del botón de cerrar
+          closeButton.insertAdjacentHTML('beforebegin', storeButtons.join(''));
+        }
       }
+      // --- FIN: Bloque de botones de tiendas ---
 
     } catch (err) {
       console.error('Error cargando detalle del juego', err);

@@ -59,7 +59,7 @@ button:focus-visible {
   top: 0;
   left: 0;
   z-index: 100;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: transparent;
 }
 
 .top-bar .rectangle img {
@@ -89,11 +89,12 @@ button:focus-visible {
   white-space: nowrap;
   padding-bottom: 4px;
   text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  color: #ffffff;         /* Asegura que TODOS los tabs sean blancos */
+  text-decoration: none; /* Quita el subrayado azul del enlace */
 }
 
 .tab.active {
   font-weight: 700;
-  border-bottom: 2px solid #ffffff;
 }
 
 .textfield {
@@ -228,7 +229,7 @@ button:focus-visible {
   justify-content: center;
   gap: 60px;
   padding: 60px 40px; /* Padding reducido */
-  background-color: rgba(26, 26, 26, 0.6); /* FONDO SEMI-TRANSPARENTE */
+  background-color: transparent; /* FONDO SEMI-TRANSPARENTE */
 }
 
 .container-3 {
@@ -373,7 +374,7 @@ button:focus-visible {
   flex-direction: column;
   gap: 4px;
   padding: 12px;
-  background-color: rgba(38, 87, 172, 0.85); 
+  background-color: black; 
 }
 
 .title-8 { /* Título del juego */
@@ -404,7 +405,7 @@ button:focus-visible {
   gap: 60px;
   padding: 60px 40px;
   width: 100%;
-  background-color: rgba(26, 26, 26, 0.6); /* FONDO SEMI-TRANSPARENTE */
+  background-color: transparent; /* FONDO SEMI-TRANSPARENTE */
 }
 
 .container-4 { /* Título "Reseñas" */
@@ -538,4 +539,9 @@ button:focus-visible {
 .modal.show .modal-content {
   -webkit-animation: scale-up-bottom 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 	        animation: scale-up-bottom 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+.modal-footer .btn-store {
+  margin-right: 8px; /* Añade un espacio a la derecha de cada botón de tienda */
+  color: #ffffff; /* Asegura texto blanco */
 }
