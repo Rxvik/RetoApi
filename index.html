@@ -3,47 +3,83 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
-    <title>Catálogo de Juegos — Inicio</title>
-    <meta name="description" content="Explora lanzamientos y reseñas de videojuegos. Encuentra tu próxima aventura y consulta opiniones de jugadores." />
+    <title>Checkpoint — Inicio</title>
+    <meta
+      name="description"
+      content="Explora lanzamientos y reseñas de videojuegos. Encuentra tu próxima aventura y consulta opiniones de jugadores."
+    />
     <link rel="stylesheet" href="CSS/global.css" />
     <link rel="stylesheet" href="CSS/style.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body>
 
+  <body>
     <video class="hero-background-video" autoplay loop muted playsinline>
-      <source id="hero-video-source" src="assets/imagenes/FondoBGPrincipal.mp4" type="video/mp4">
+      <source
+        id="hero-video-source"
+        src="assets/imagenes/FondoBGPrincipal.mp4"
+        type="video/mp4"
+      />
       Tu navegador no soporta videos.
     </video>
 
     <div class="page">
       <header class="top-bar" role="banner">
         <div class="rectangle" aria-hidden="true">
-          <img class="rectangle" src="assets/imagenes/LogoXH.png" alt="Logo" />
+          <img
+            class="rectangle"
+            src="assets/imagenes/LogoXH.png"
+            alt="Logo"
+          />
         </div>
-        <h1 class="title">Catalogo de Juegos</h1>
-        
+        <h1 class="title">Checkpoint</h1>
+
         <nav class="navigation" aria-label="Navegación principal">
           <span class="tab active btn-glitch" data-text="Inicio">Inicio</span>
-          <a class="tab btn-glitch" href="catalogo.html" data-text="Catalogo">Catalogo</a>
-          
-            <input type="text" placeholder="Buscar Juego" id="buscador" class="textfield">
-            <button class="ic-search" type="button" aria-label="Buscar">
-              <img class="shape" src="assets/imagenes/lupa.png" alt="Icono de búsqueda" />
-            </button>
-          
-          <div id="auth-container">
-            </div>
+          <a class="tab btn-glitch" href="catalogo.html" data-text="Catalogo"
+            >Catalogo</a
+          >
 
+          <div class="input__container">
+            <input
+              type="text"
+              placeholder="Buscar Juego"
+              id="buscador"
+              class="input__search"
+            />
+
+            <button
+              class="input__button__shadow"
+              type="button"
+              aria-label="Buscar"
+            >
+              <img
+                class="shape"
+                src="assets/imagenes/lupa.png"
+                alt="Icono de búsqueda"
+              />
+            </button>
+
+            <div class="shadow__input"></div>
+          </div>
+
+          <div id="auth-container"></div>
         </nav>
       </header>
+
       <main class="frame">
         <div class="group">
           <div class="div">
             <div class="container">
-              <p class="text-wrapper">Bienvenido a la libreria de juegos definitiva</p>
+              <p class="text-wrapper">
+                Bienvenido a la libreria de juegos definitiva
+              </p>
               <p class="description">
-                Descubre juegos epicos, consulta las opiniones de los usuarios, y encuentra tu proximo favorito.
+                Descubre juegos epicos, consulta las opiniones de los usuarios,
+                y encuentra tu proximo favorito.
               </p>
             </div>
           </div>
@@ -53,84 +89,151 @@
       <div class="section-2">
         <div class="container-3">
           <div class="title-5">Descubre tu siguiente aventura</div>
-          <p class="description-2">Explora una basta categoria de juegos seleccionados para ti.</p>
+          <p class="description-2">
+            Explora una basta categoria de juegos seleccionados para ti.
+          </p>
           <a class="button" href="catalogo.html">
-            <div class="primary btn-glow"><div class="title-2">Buscar Juegos</div></div>
+            <div class="primary btn-glow">
+              <div class="title-2">Buscar Juegos</div>
+            </div>
           </a>
         </div>
       </div>
 
       <div class="products">
-        <div class="div-wrapper"><div class="title-6">Cargando juegos...</div></div>
-        
-        <div class="list">
-          <div class="row">
-          </div>
+        <div class="div-wrapper">
+          <div class="title-6">Juegos Populares</div>
+        </div>
+
+        <div class="list" id="popular-games-list"></div>
+
+        <div class="refresh-button-container">
+          <button class="popular-refresh-btn" id="refresh-popular-btn">
+            <span class="button__text">
+              <span style="--index: 0">R</span><span style="--index: 1">E</span
+              ><span style="--index: 2">F</span><span style="--index: 3">R</span
+              ><span style="--index: 4">E</span><span style="--index: 5">S</span
+              ><span style="--index: 6">C</span><span style="--index: 7">A</span
+              ><span style="--index: 8">R</span><span style="--index: 9">&nbsp;</span
+              ><span style="--index: 10">J</span
+              ><span style="--index: 11">U</span><span style="--index: 12">E</span
+              ><span style="--index: 13">G</span><span style="--index: 14">O</span
+              ><span style="--index: 15">S</span><span style="--index: 16">.</span
+              ><span style="--index: 17">.</span><span style="--index: 18">.</span>
+            </span>
+
+            <span class="button__circle">
+              <svg
+                class="button__icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="currentColor"
+              >
+                <path
+                  d="M12 2C6.477 2 2 6.477 2 12S6.477 22 12 22 22 17.523 22 12 17.523 2 12 2ZM17.47 15.114A7.96 7.96 0 0 1 12 20A8 8 0 0 1 5.65 6.34A8.017 8.017 0 0 1 12 4C14.12 4 16.077 4.898 17.47 6.34L15 8.81V4H20V9L17.47 6.47V6.477V15.114Z"
+                ></path>
+              </svg>
+
+              <svg
+                class="button__icon button__icon--copy"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="currentColor"
+              >
+                <path
+                  d="M12 2C6.477 2 2 6.477 2 12S6.477 22 12 22 22 17.523 22 12 17.523 2 12 2ZM17.47 15.114A7.96 7.96 0 0 1 12 20A8 8 0 0 1 5.65 6.34A8.017 8.017 0 0 1 12 4C14.12 4 16.077 4.898 17.47 6.34L15 8.81V4H20V9L17.47 6.47V6.477V15.114Z"
+                ></path>
+              </svg>
+            </span>
+          </button>
         </div>
       </div>
 
       <div class="featured-game-rotator">
-  <div class="div-wrapper">
-    <div class="title-6">Juego Destacado</div>
-  </div>
-  
-  <div class="rotator-content">
-    
-    <div id="featured-game-card" class="card">
-      <div class="image-container" style="height: 200px; background-color: #333;"></div>
-      <div class="text-content">
-          <div class="title-8">Cargando...</div>
-          <p class="subtitle">...</p>
-      </div>
-    </div>
-    
-    <div id="featured-game-ratings">
-      <div class="rating-box">
-        <div class="rating-label">Rating de Usuarios</div>
-        <div class="rating-value">-.-</div>
-      </div>
-      <div class="rating-box">
-        <div class="rating-label">Metacritic</div>
-        <div class="rating-value metacritic">-.-</div>
-      </div>
-    </div>
+        <div class="div-wrapper">
+          <div class="title-6">Juego Destacado</div>
+        </div>
 
-  </div>
-</div>
+        <div class="rotator-content">
+          <div id="featured-game-card" class="card">
+            <div
+              class="image-container"
+              style="height: 200px; background-color: #333;"
+            ></div>
+            <div class="text-content">
+              <div class="title-8">Cargando...</div>
+              <p class="subtitle">...</p>
+            </div>
+          </div>
 
-      
+          <div id="featured-game-ratings">
+            <div class="rating-box">
+              <div class="rating-label">Rating de Usuarios</div>
+              <div class="rating-value">-.-</div>
+            </div>
+            <div class="rating-box">
+              <div class="rating-label">Metacritic</div>
+              <div class="rating-value metacritic">-.-</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <footer class="container-5" role="contentinfo">
         <p class="title-13">© 2025 SA. de CV.</p>
         <div class="title-14">Politicas de Privacidad</div>
         <div class="title-15">Terminos de Servicio</div>
         <div class="title-16">Contactanos</div>
       </footer>
-    </div> <div class="modal" id="gameDetailModal" tabindex="-1" aria-labelledby="gameDetailModalLabel" aria-hidden="true">
+    </div>
+
+    <div
+      class="modal"
+      id="gameDetailModal"
+      tabindex="-1"
+      aria-labelledby="gameDetailModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="modal-game-title">Cargando...</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
+
           <div class="modal-body" id="modal-game-body">
-            <div classd="text-center">
+            <div class="text-center">
               <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
           </div>
+
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
           </div>
         </div>
       </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-    
     <script src="JS/index.js" defer></script>
-    
   </body>
 </html>

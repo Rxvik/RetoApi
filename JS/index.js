@@ -1,4 +1,4 @@
-// Contenido completo para JS/index.js
+const getRandomHue = () => Math.floor(Math.random() * 360);
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHXOnzpazOGRkSwuD9JGmU-jGw2TKcgXA",
@@ -23,15 +23,12 @@ const showLoginUI = () => {
 
 const showLogoutUI = (user) => {
   const profilePic = user.photoURL || ''; 
-
   authContainer.innerHTML = `
     <div class="user-info-header">
       <div class="header-avatar">
         <img src="${profilePic}" 
              alt="Avatar de ${user.displayName}" 
-             
-             onerror="this.src='assets/imagenes/FedeObo.jpg'; this.alt='Avatar';" />
-             
+             onerror="this.src='assets/imagenes/LogoXH.png'; this.alt='Avatar';" />
       </div>
       <div class="header-username">${user.displayName}</div>
       <button id="btn-logout" class="header-logout-btn">Cerrar Sesión</button>
@@ -61,17 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const API_KEY = 'f8600f270c5a46cbbd3ee5e3324530c9';
   const API_BASE = 'https://api.rawg.io/api';
   
-  // Contenedores para "Juegos Populares"
-  const popularContainer = document.querySelector('.products .list');
+  const popularContainer = document.getElementById('popular-games-list');
   const sectionTitle = document.querySelector('.products .title-6');
   
-  // Contenedores para el ROTADOR
   const rotatorCardContainer = document.getElementById('featured-game-card');
   const rotatorRatingsContainer = document.getElementById('featured-game-ratings');
-  let rotatorGames = []; // Aquí guardaremos los juegos para rotar
+  let rotatorGames = []; 
   let rotatorIndex = 0;
+  
+  const refreshPopularBtn = document.getElementById('refresh-popular-btn');
 
-  // Contenedores para el MODAL
   const modalElement = document.getElementById('gameDetailModal');
   const gameModal = new bootstrap.Modal(modalElement);
   const modalTitle = document.getElementById('modal-game-title');
@@ -81,17 +77,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const init = async () => {
     loadPopularGames();
     initRotator();
+
+    if (refreshPopularBtn) {
+      refreshPopularBtn.addEventListener('click', loadPopularGames);
+    }
   };
 
-  // Carga los 5 juegos populares de siempre
   const loadPopularGames = async () => {
+    if (!popularContainer) return; 
+
+    popularContainer.innerHTML = '<p style="text-align: center; width: 100%; font-size: 1.2em; padding: 20px 0;">Cargando nuevos juegos...</p>';
+    
     try {
       const randomPage = Math.floor(Math.random() * 50) + 1;
       const url = `${API_BASE}/games?key=${API_KEY}&page=${randomPage}&page_size=5&ordering=-rating`;
       const gamesData = await fetchJSON(url);
       
       sectionTitle.textContent = "Juegos Populares";
-      renderRow(gamesData.results, popularContainer);
+      renderRow(gamesData.results, popularContainer); 
 
     } catch (err) {
       console.error(err);
@@ -99,22 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // --- NUEVA LÓGICA DEL ROTADOR ---
-
-  // 1. Carga una lista de 20 juegos para usar en el rotador
   const initRotator = async () => {
-    if (!rotatorCardContainer || !rotatorRatingsContainer) return; // No hacer nada si no existen
-
+    if (!rotatorCardContainer || !rotatorRatingsContainer) return; 
     try {
       const randomPage = Math.floor(Math.random() * 20) + 1;
-      // Pedimos 20 juegos de alta calificación
       const url = `${API_BASE}/games?key=${API_KEY}&page=${randomPage}&page_size=20&ordering=-rating`;
       const data = await fetchJSON(url);
-      rotatorGames = data.results.filter(g => g.background_image); // Guardamos solo juegos con imagen
-      
+      rotatorGames = data.results.filter(g => g.background_image); 
       if (rotatorGames.length > 0) {
-        showNextGame(); // Mostramos el primer juego
-        setInterval(showNextGame, 5000); // Cambiamos cada 5 segundos
+        showNextGame(); 
+        setInterval(showNextGame, 5000); 
       }
     } catch (err) {
       console.error("Error al iniciar el rotador:", err);
@@ -122,72 +119,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // 2. Muestra el siguiente juego de la lista
   const showNextGame = () => {
     if (rotatorGames.length === 0) return;
-
-    // Obtiene el juego actual
     const game = rotatorGames[rotatorIndex];
-
-    // Aplicamos animación de salida
     rotatorCardContainer.classList.add('rotator-fade-out');
     rotatorRatingsContainer.classList.add('rotator-fade-out');
-
-    // Esperamos que termine la animación de salida para cambiar el contenido
     setTimeout(() => {
-      // --- Actualiza la tarjeta del juego ---
-      // Limpiamos la tarjeta anterior
-      rotatorCardContainer.innerHTML = '';
-      
-      // Creamos la nueva tarjeta (sin el tag de rating)
-      const genres = (game.genres || []).map(g => g.name).slice(0, 3).join(', ');
+      const hue = getRandomHue();
+      rotatorCardContainer.style.setProperty('--card-hue', hue);
       rotatorCardContainer.innerHTML = `
-        <div class="image-container">
-          <img class="image-3" src="${game.background_image}" alt="${escapeHTML(game.name)}">
-        </div>
+        <div class="image-container"><img class="image-3" src="${game.background_image}" alt="${escapeHTML(game.name)}"></div>
         <div class="text-content">
           <div class="title-8">${escapeHTML(game.name)}</div>
-          <p class="subtitle">${escapeHTML(genres)}</p>
+          <p class="subtitle">${escapeHTML((game.genres || []).map(g => g.name).slice(0, 3).join(', '))}</p>
         </div>
       `;
-      // Añadimos el listener para el modal
       rotatorCardContainer.addEventListener('click', () => showGameModal(game.slug));
-
-      // --- Actualiza las calificaciones ---
       const userRating = game.rating ? game.rating.toFixed(1) : 'N/A';
       const metacriticRating = game.metacritic || 'N/A';
-      
       rotatorRatingsContainer.innerHTML = `
-        <div class="rating-box">
-          <div class="rating-label">Rating de Usuarios</div>
-          <div class="rating-value">${userRating}</div>
-        </div>
-        <div class="rating-box">
-          <div class="rating-label">Metacritic</div>
-          <div class="rating-value metacritic">${metacriticRating}</div>
-        </div>
+        <div class="rating-box"><div class="rating-label">Rating de Usuarios</div><div class="rating-value">${userRating}</div></div>
+        <div class="rating-box"><div class="rating-label">Metacritic</div><div class="rating-value metacritic">${metacriticRating}</div></div>
       `;
-
-      // Aplicamos animación de entrada
       rotatorCardContainer.classList.remove('rotator-fade-out');
       rotatorRatingsContainer.classList.remove('rotator-fade-out');
-
-    }, 300); // 300ms para la animación
-
-    // Avanzamos al siguiente juego
+    }, 300); 
     rotatorIndex = (rotatorIndex + 1) % rotatorGames.length;
   };
   
-  // --- FIN DE LA LÓGICA DEL ROTADOR ---
-
-
   const fetchJSON = async (url) => {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Error HTTP: ${res.status} al cargar ${url}`);
     return await res.json();
   };
 
-  // Esta función se usa para "Juegos Populares"
   const renderRow = (games, containerElement) => {
     containerElement.innerHTML = ''; 
     if (!games || games.length === 0) {
@@ -201,14 +166,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Esta tarjeta se usa para "Juegos Populares" (incluye rating en la esquina)
   const posterCard = (game) => {
     const card = document.createElement('div');
     card.className = 'card';
-    
+    const hue = getRandomHue();
+    card.style.setProperty('--card-hue', hue);
     const genres = (game.genres || []).map(g => g.name).slice(0, 3).join(', ');
     const rating = game.rating || 'N/A';
-    
     card.innerHTML = `
       <div class="image-container">
         <img class="image-3" src="${game.background_image}" alt="${escapeHTML(game.name)}">
@@ -219,12 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="subtitle">${escapeHTML(genres)}</p>
       </div>
     `;
-
     card.addEventListener('click', () => showGameModal(game.slug));
     return card;
   };
   
-  // Lógica del modal (sin cambios)
   const showGameModal = async (gameSlug) => {
     modalTitle.textContent = 'Cargando...';
     modalBody.innerHTML = `
@@ -240,23 +202,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     gameModal.show();
-
     try {
       const url = `${API_BASE}/games/${gameSlug}?key=${API_KEY}`;
       const gameDetails = await fetchJSON(url);
-
       modalTitle.textContent = gameDetails.name;
       modalBody.innerHTML = `
         <img src="${gameDetails.background_image}" class="img-fluid mb-3 modal-game-image" alt="${escapeHTML(gameDetails.name)}">
         <p>${escapeHTML(gameDetails.description_raw)}</p>
       `;
-
       if (modalFooter) {
         const closeButton = modalFooter.querySelector('button[data-bs-dismiss="modal"]');
         const stores = (gameDetails.stores || []).map(s => (s.store && s.store.name) || s.name).filter(Boolean).map(s => s.toLowerCase());
         const storeButtons = [];
         const nameEncoded = encodeURIComponent(gameDetails.name || '');
-
         if (stores.some(s => s.includes('steam'))) {
           storeButtons.push(`<a class="btn btn-primary btn-store" target="_blank" rel="noopener" href="https://store.steampowered.com/search/?term=${nameEncoded}">Ver en Steam</a>`);
         }
@@ -266,12 +224,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stores.some(s => s.includes('microsoft') || s.includes('xbox'))) {
           storeButtons.push(`<a class="btn btn-info btn-store" target="_blank" rel="noopener" href="https://www.microsoft.com/search?q=${nameEncoded}">Ver en Microsoft</a>`);
         }
-
         if (storeButtons.length > 0 && closeButton) {
           closeButton.insertAdjacentHTML('beforebegin', storeButtons.join(''));
         }
       }
-
     } catch (err) {
       console.error(err);
       modalBody.innerHTML = `<p>Error al cargar los detalles del juego.</p>`;
@@ -288,6 +244,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }[m]));
   };
 
+  const initScrollAnimation = () => {
+    const sections = document.querySelectorAll('.frame, .section-2, .products, .featured-game-rotator, .container-5');
+    
+    const observerOptions = {
+      root: null, 
+      rootMargin: '0px',
+      threshold: 0.01 
+    };
+
+    const observerCallback = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('section-is-visible'); 
+          observer.unobserve(entry.target); 
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  };
+
   init();
+  initScrollAnimation(); 
 
 });

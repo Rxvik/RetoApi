@@ -89,45 +89,14 @@ button:focus-visible {
   white-space: nowrap;
   padding-bottom: 4px;
   text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-  color: #ffffff;         /* Asegura que TODOS los tabs sean blancos */
-  text-decoration: none; /* Quita el subrayado azul del enlace */
+  color: #ffffff;         
+  text-decoration: none; 
 }
 
 .tab.active {
   font-weight: 700;
 }
 
-.textfield {
-  width: 200px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ffffff80;
-  background-color: #00000030;
-}
-
-.textfield .text {
-  flex: 1;
-  font-size: 14px;
-  color: #f0f0f0;
-}
-
-.ic-search {
-  width: 20px;
-  height: 20px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.ic-search .shape {
-  width: 100%;
-  height: 100%;
-  filter: invert(1); /* Pone la lupa blanca */
-}
 
 /* Estilos de Login (Firebase) */
 .header-login-btn,
@@ -159,21 +128,21 @@ button:focus-visible {
   margin-left: 20px;
 }
 
-/* Este es el CONTENEDOR del avatar */
+
 .header-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%;         /* Lo hacemos un círculo */
-  overflow: hidden;          /* <-- ESTA ES LA MAGIA: esconde el texto alt si se desborda */
-  background-color: #333;    /* Un fondo gris por si la imagen falla */
-  flex-shrink: 0;            /* Evita que el círculo se encoja */
+  border-radius: 50%;       
+  overflow: hidden;          
+  background-color: #333;   
+  flex-shrink: 0;            
 }
 
-/* Hacemos que la IMAGEN llene el contenedor */
+
 .header-avatar img {
   width: 100%;
   height: 100%;
-  object-fit: cover;         /* Esto ya lo tenías y es perfecto */
+  object-fit: cover;        
 }
 
 .header-username {
@@ -186,7 +155,7 @@ button:focus-visible {
 /* --- 5. SECCIÓN BIENVENIDA (HERO) --- */
 .frame {
   width: 100%;
-  padding-top: 80px; /* Empuja el contenido debajo del header */
+  padding-top: 80px; 
   position: relative;
 }
 
@@ -198,11 +167,11 @@ button:focus-visible {
 .div {
   position: relative;
   width: 100%;
-  height: 375px; /* Altura de la sección de bienvenida */
+  height: 375px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparent; /* Se ve el video de fondo */
+  background-color: transparent; 
 }
 
 .div .container {
@@ -211,7 +180,7 @@ button:focus-visible {
   align-items: center;
   gap: 24px;
   padding: 20px;
-  z-index: 2; /* Encima del video */
+  z-index: 2; 
 }
 
 .text-wrapper {
@@ -240,8 +209,8 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 60px;
-  padding: 60px 40px; /* Padding reducido */
-  background-color: transparent; /* FONDO SEMI-TRANSPARENTE */
+  padding: 60px 40px; 
+  background-color: transparent; 
 }
 
 .container-3 {
@@ -279,7 +248,7 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   padding: 12px;
-  background-color: #000000; /* Botón negro sólido */
+  background-color: #000000; 
   border-radius: 8px;
   transition: background-color 0.2s;
 }
@@ -291,13 +260,13 @@ button:focus-visible {
   width: fit-content;
   font-family: "Roboto-Medium", Helvetica;
   font-weight: 500;
-  color: #ffffff; /* Texto del botón blanco */
+  color: #ffffff; 
   font-size: 16px;
   line-height: 24px; 
   white-space: nowrap;
 }
 
-/* --- 7. SECCIÓN "JUEGOS POPULARES" --- */
+
 .products {
   display: flex;
   flex-direction: column;
@@ -305,7 +274,7 @@ button:focus-visible {
   gap: 60px;
   padding: 60px 40px;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.3); /* FONDO SEMI-TRANSPARENTE */
+  background-color: rgba(0, 0, 0, 0.3); 
 }
 
 .div-wrapper {
@@ -328,21 +297,21 @@ button:focus-visible {
   width: 100%;
   max-width: 1200px; 
   display: flex;
-  flex-direction: row;     /* <-- CAMBIA ESTO */
-  flex-wrap: wrap;        /* <-- AÑADE ESTO */
-  align-items: flex-start;  /* <-- CAMBIA ESTO */
+  flex-direction: row;     
+  flex-wrap: wrap;        
+  align-items: flex-start;  
   justify-content: center;
   gap: 40px;
 }
 
 .card {
   flex: 1;
-  min-width: 300px; /* Ancho mínimo de tarjeta */
-  max-width: 350px; /* Ancho máximo de tarjeta */
+  min-width: 300px; 
+  max-width: 350px; 
   border: 1px solid #ffffff30;
   border-radius: 6px;
   overflow: hidden;
-  background-color: rgba(26, 26, 26, 0.7); /* TARJETA SEMI-TRANSPARENTE */
+  background-color: rgba(26, 26, 26, 0.7); 
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -354,11 +323,11 @@ button:focus-visible {
 
 .image-container {
   width: 100%;
-  height: 200px; /* Altura fija para la imagen */
+  height: 200px; 
   position: relative;
 }
 
-.image-container .image-3 { /* Esta es tu imagen de juego */
+.image-container .image-3 { 
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -411,13 +380,13 @@ button:focus-visible {
 /* --- 8. SECCIÓN "RESEÑAS" --- */
 .reviews {
   display: flex;
-  flex-wrap: wrap; /* Permite que baje en móvil */
+  flex-wrap: wrap; 
   align-items: center;
   justify-content: center;
   gap: 60px;
   padding: 60px 40px;
   width: 100%;
-  background-color: transparent; /* FONDO SEMI-TRANSPARENTE */
+  background-color: transparent; 
 }
 
 .container-4 { /* Título "Reseñas" */
@@ -444,10 +413,10 @@ button:focus-visible {
 
 .card-2 { /* Tarjeta de reseña */
   width: 100%;
-  max-width: 400px; /* Ancho máximo por tarjeta */
+  max-width: 400px; 
   gap: 16px;
   padding: 16px;
-  background-color: rgba(0, 0, 0, 0.4); /* TARJETA SEMI-TRANSPARENTE */
+  background-color: rgba(0, 0, 0, 0.4); 
   border-radius: 6px;
   display: flex;
   flex-direction: column;
@@ -498,22 +467,21 @@ button:focus-visible {
   justify-content: center;
   gap: 40px;
   padding: 40px;
-  background-color: rgba(0, 0, 0, 0.4); /* FONDO SEMI-TRANSPARENTE */
+  background-color: rgba(0, 0, 0, 0.4); 
 }
 
 .title-13, .title-14, .title-15, .title-16 {
-  font-size: 16px; /* Más pequeño para footer */
+  font-size: 16px;
   font-weight: 400;
   color: #ccc;
   white-space: nowrap;
 }
 
 /* --- 10. MODAL Y ANIMACIÓN --- */
-/* Usamos un selector más fuerte para ganar al CSS de Bootstrap */
 .modal .modal-content {
-  background-color: #1e1e2f; /* Un tono oscuro, azul/morado */
+  background-color: #1e1e2f; 
   border: 1px solid #ffffff30;
-  color: #ffffff; /* Aseguramos texto blanco */
+  color: #ffffff; 
 }
 
 /* Título y texto del cuerpo del modal */
@@ -538,7 +506,6 @@ button:focus-visible {
   filter: invert(1) grayscale(100%) brightness(200%);
 }
 
-/* Animista: scale-up-bottom */
 @-webkit-keyframes scale-up-bottom {
   0% { -webkit-transform: scale(0.5); transform: scale(0.5); -webkit-transform-origin: 50% 100%; transform-origin: 50% 100%; }
   100% { -webkit-transform: scale(1); transform: scale(1); -webkit-transform-origin: 50% 100%; transform-origin: 50% 100%; }
@@ -554,8 +521,8 @@ button:focus-visible {
 }
 
 .modal-footer .btn-store {
-  margin-right: 8px; /* Añade un espacio a la derecha de cada botón de tienda */
-  color: #ffffff; /* Asegura texto blanco */
+  margin-right: 8px; 
+  color: #ffffff; 
 }
 
 /* --- 12. ROTADOR DE JUEGOS DESTACADOS --- */
@@ -563,34 +530,33 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 60px; /* Espacio entre el título y el contenido */
+  gap: 60px; 
   padding: 60px 40px;
   width: 100%;
-  background-color: transparent; /* Fondo semi-transparente */
-  overflow: hidden; /* Evita desbordes durante la transición */
+  background-color: transparent; 
+  overflow: hidden; 
 }
 
 .rotator-content {
   display: flex;
-  flex-direction: row; /* Elementos uno al lado del otro */
-  flex-wrap: wrap; /* Se apilan en pantallas pequeñas */
+  flex-direction: row; 
+  flex-wrap: wrap; 
   align-items: center;
   justify-content: center;
   gap: 40px;
   width: 100%;
-  max-width: 800px; /* Ancho máximo del contenedor */
+  max-width: 800px; 
 }
 
-/* El ID #featured-game-card usará los estilos de .card que ya existen */
 #featured-game-card {
-  flex: 1; /* Ocupa el espacio disponible */
+  flex: 1; 
   min-width: 300px;
   max-width: 350px;
   transition: all 0.5s ease-in-out;
 }
 
 #featured-game-ratings {
-  flex: 1; /* Ocupa el espacio disponible */
+  flex: 1; 
   min-width: 250px;
   display: flex;
   flex-direction: column;
@@ -620,12 +586,10 @@ button:focus-visible {
   line-height: 1.1;
 }
 
-/* Color especial para Metacritic */
 .rating-box .rating-value.metacritic {
-  color: #6c3; /* Verde Metacritic */
+  color: #6c3; 
 }
 
-/* Pequeña animación de entrada */
 .rotator-fade-out {
   opacity: 0;
   transform: scale(0.95);
@@ -633,21 +597,16 @@ button:focus-visible {
 
 /* --- 13. ESTILO BOTÓN CON BRILLO (GLOW) --- */
 
-/* * Usamos .btn-glow. Esto sobreescribirá los estilos
- * de .primary donde sea necesario.
-*/
 .btn-glow {
-  /* Variables de color del usuario */
   --glow-color: rgb(217, 176, 255);
   --glow-spread-color: rgba(191, 123, 255, 0.781);
   --enhanced-glow-color: rgb(231, 206, 255);
   --btn-color: rgb(100, 61, 136);
 
-  /* Reseteamos/Sobreescribimos .primary */
-  width: auto; /* Dejamos que el padding defina el ancho */
+  width: auto;
   border: .25em solid var(--glow-color);
   padding: 1em 3em;
-  color: var(--glow-color); /* Color del div (no visible) */
+  color: var(--glow-color); 
   font-size: 15px;
   font-weight: bold;
   background-color: var(--btn-color);
@@ -657,23 +616,20 @@ button:focus-visible {
         0 0 4em 1em var(--glow-spread-color),
         inset 0 0 .75em .25em var(--glow-color);
   text-shadow: 0 0 .5em var(--glow-color);
-  position: relative; /* Necesario para el ::after */
+  position: relative; 
   transition: all 0.3s;
   
-  /* Aseguramos centrado (ya venía de .primary) */
+
   align-items: center;
   justify-content: center;
 }
 
-/* * El texto está en un <div>.title-2 DENTRO del .btn-glow.
- * Necesitamos que el texto tome los colores correctos.
- */
 .btn-glow .title-2 {
-    color: var(--glow-color); /* Color inicial del texto */
+    color: var(--glow-color); 
     font-size: 15px;
     font-weight: bold;
     text-shadow: 0 0 .5em var(--glow-color);
-    transition: all 0.3s; /* Transición de color de texto */
+    transition: all 0.3s; 
 }
 
 .btn-glow::after {
@@ -690,9 +646,6 @@ button:focus-visible {
   transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
 }
 
-/* * El hover es en el <a> (clase .button), 
- * pero queremos cambiar el .btn-glow (el div interior).
-*/
 .button:hover .btn-glow {
   background-color: var(--glow-color);
   box-shadow: 0 0 1em .25em var(--glow-color),
@@ -700,13 +653,11 @@ button:focus-visible {
         inset 0 0 .75em .25em var(--glow-color);
 }
 
-/* El texto SÍ debe cambiar de color al hacer hover */
 .button:hover .btn-glow .title-2 {
     color: var(--btn-color);
-    text-shadow: none; /* Quitamos el brillo del texto */
+    text-shadow: none; 
 }
 
-/* El active también es sobre el <a> */
 .button:active .btn-glow {
   box-shadow: 0 0 0.6em .25em var(--glow-color),
         0 0 2.5em 2em var(--glow-spread-color),
@@ -715,36 +666,30 @@ button:focus-visible {
 
 /* --- 14. ESTILO BOTÓN GLITCH HEADER --- */
 
-/* * Primero, reseteamos los estilos de los botones originales 
- * para que no entren en conflicto con los nuevos.
-*/
 .navigation .tab,
 .navigation .header-login-btn {
   border: none;
   background: none;
-  padding: 0; /* El nuevo estilo .btn-glitch pondrá su propio padding */
-  text-shadow: none; /* Quitar sombras de texto antiguas */
+  padding: 0; 
+  text-shadow: none; 
   font-size: 16px; 
   font-weight: 500;
-  border-bottom: none !important; /* Quitar el borde .active */
-  margin-left: 0; /* Quitar el margen del botón de login */
+  border-bottom: none !important; 
+  margin-left: 0; 
   line-height: 1.2;
 }
 
-/* * Tu código, adaptado a la clase .btn-glitch 
- * y con padding/font-size ajustados para el header.
-*/
 .btn-glitch,
 .btn-glitch::after {
-  padding: 10px 25px; /* Reduje el padding lateral de 50px a 25px */
-  font-size: 16px; /* Reduje el font-size de 20px a 16px */
+  padding: 10px 25px; 
+  font-size: 16px; 
   border: none;
   border-radius: 5px;
   color: white;
   background-color: transparent;
   position: relative;
-  cursor: pointer; /* Añadido para los <span> y <a> */
-  text-decoration: none; /* Añadido para los <a> */
+  cursor: pointer; 
+  text-decoration: none; 
 }
 
 .btn-glitch::after {
@@ -756,8 +701,6 @@ button:focus-visible {
   --move6: inset(14% 0 61% 0);
   clip-path: var(--move1);
   
-  /* --- ESTA ES LA CORRECCIÓN CLAVE --- */
-  /* Lee el texto del atributo data-text que pusimos en el HTML */
   content: attr(data-text); 
 
   position: absolute;
@@ -767,7 +710,6 @@ button:focus-visible {
   bottom: 0;
   display: block;
 
-  /* Añadido para que el texto se alinee perfectamente */
   padding: 10px 25px;
   line-height: 1.2;
 }
@@ -791,7 +733,6 @@ button:focus-visible {
   box-shadow: 0px 10px 10px -10px rgb(0, 255, 213);
 }
 
-/* Tu animación @keyframes (va al final) */
 @keyframes glitch_4011 {
   0% {
     clip-path: var(--move1);
@@ -847,4 +788,241 @@ button:focus-visible {
     clip-path: var(--move1);
     transform: translate(0);
   }
+}
+
+/* --- 15. ESTILO DE TARJETA CON BRILLO (CORREGIDO) --- */
+
+:root {
+  --card-hue: 200; 
+}
+
+.card,
+#featured-game-card {
+  --color1: hsl(var(--card-hue), 100%, 70%);
+  --color2: hsl(calc(var(--card-hue) + 40), 100%, 70%);
+  --background: linear-gradient(to left, var(--color1) 0%, var(--color2) 100%);
+
+  padding: 5px; 
+  border-radius: 1rem;
+  overflow: visible;
+  background: var(--background);
+  position: relative;
+  z-index: 1;
+
+  border: none;
+  background-color: transparent;
+  color: #ffffff;
+}
+
+.card::after,
+#featured-game-card::after {
+  position: absolute;
+  content: "";
+  top: 30px;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+  transform: scale(0.8);
+  filter: blur(25px);
+  background: var(--background);
+  transition: opacity .5s, background .5s;
+}
+
+.card .image-container,
+#featured-game-card .image-container {
+  border-radius: .7rem .7rem 0 0;
+  overflow: hidden;
+}
+
+.card .text-content,
+#featured-game-card .text-content {
+  background: #181818; 
+  color: #ffffff;
+  border-radius: 0 0 .7rem .7rem;
+}
+
+.card:hover::after,
+#featured-game-card:hover::after {
+  opacity: 0; 
+}
+
+.card:hover .text-content .title-8,
+#featured-game-card:hover .text-content .title-8 {
+  color: var(--color1); 
+  transition: color 1s;
+}
+
+/* --- 16. BOTÓN DE ACTUALIZAR JUEGOS POPULARES --- */
+
+.refresh-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1px 0;
+}
+
+.popular-refresh-btn {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: #fff;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  place-content: center;
+  transition:
+    background 300ms,
+    transform 200ms;
+  font-weight: 600;
+}
+
+.popular-refresh-btn .button__text {
+  position: absolute;
+  inset: 0;
+  animation: text-rotation 12s linear infinite; 
+
+  & > span {
+    position: absolute;
+    transform: rotate(calc(19deg * var(--index))); 
+    inset: 7px;
+  }
+}
+
+.popular-refresh-btn .button__circle {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  background: #fff;
+  color: transparent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popular-refresh-btn .button__icon--copy {
+  position: absolute;
+  transform: translate(-150%, 150%);
+}
+
+.popular-refresh-btn:hover {
+  background: #000;
+  transform: scale(1.05);
+}
+
+.popular-refresh-btn:hover .button__icon {
+  color: #000; 
+}
+
+.popular-refresh-btn:hover .button__icon:first-child {
+  transition: transform 0.3s ease-in-out;
+  transform: translate(150%, -150%);
+}
+
+.popular-refresh-btn:hover .button__icon--copy {
+  transition: transform 0.3s ease-in-out 0.1s;
+  transform: translate(0);
+}
+
+@keyframes text-rotation {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* --- 17. ANIMACIÓN DE SCROLL (FADE-IN) --- */
+
+.frame,
+.section-2,
+.products,
+.featured-game-rotator,
+.container-5,
+.section-catalogo-user,
+.form-catalogo {
+  opacity: 0; 
+  transform: translateY(40px); 
+  transition: opacity 0.8s ease-out, transform 0.6s ease-out;
+}
+
+.section-is-visible {
+  opacity: 1; 
+  transform: translateY(0); 
+}
+
+/* --- 18. NUEVA BARRA DE BÚSQUEDA 3D --- */
+
+.input__container {
+  position: relative;
+  background: rgba(255, 255, 255, 0.664);
+  padding: 10px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 22px;
+  max-width: 200px;
+  max-height: 50px;
+  transition: transform 400ms;
+  transform-style: preserve-3d;
+  transform: none; 
+  
+  perspective: 500px;
+}
+
+.shadow__input {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+  filter: blur(30px);
+  border-radius: 20px;
+  background-color: #999cff;
+  background-image: radial-gradient(at 85% 51%, hsla(60,60%,61%,1) 0px, transparent 50%),
+    radial-gradient(at 74% 68%, hsla(235,69%,77%,1) 0px, transparent 50%),
+    radial-gradient(at 64% 79%, hsla(284,72%,73%,1) 0px, transparent 50%),
+    radial-gradient(at 75% 16%, hsla(283,60%,72%,1) 0px, transparent 50%),
+    radial-gradient(at 90% 65%, hsla(153,70%,64%,1) 0px, transparent 50%),
+    radial-gradient(at 91% 83%, hsla(283,74%,69%,1) 0px, transparent 50%),
+    radial-gradient(at 72% 91%, hsla(213,75%,75%,1) 0px, transparent 50%);
+}
+
+.input__button__shadow {
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: transform 400ms, background 400ms;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  padding: 5px;
+}
+
+.input__button__shadow:hover {
+  background: rgba(255, 255, 255, 0.411);
+}
+
+.input__search {
+  width: 100%;
+  border-radius: 20px;
+  outline: none;
+  border: none;
+  padding: 8px;
+  position: relative;
+  background: transparent; 
+}
+
+.input__container .shape {
+  width: 20px;
+  height: 20px;
 }
