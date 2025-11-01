@@ -1,10 +1,63 @@
+const getRandomHue = () => Math.floor(Math.random() * 360);
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAHXOnzpazOGRkSwuD9JGmU-jGw2TKcgXA",
+  authDomain: "retoapi-ff801.firebaseapp.com",
+  projectId: "retoapi-ff801",
+  storageBucket: "retoapi-ff801.firebasestorage.app",
+  messagingSenderId: "650992142854",
+  appId: "1:650992142854:web:ddf60d1f3d0ea540c79187",
+  measurementId: "G-0ZJQRJTF86"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
+
+const authContainer = document.getElementById('auth-container');
+
+const showLoginUI = () => {
+  authContainer.innerHTML = `<button id="btn-google-login" class="header-login-btn btn-glitch" data-text="Iniciar sesión con Google">Iniciar sesión con Google</button>`;
+  document.getElementById('btn-google-login').addEventListener('click', login);
+};
+
+const showLogoutUI = (user) => {
+  const profilePic = user.photoURL || ''; 
+  authContainer.innerHTML = `
+    <div class="user-info-header">
+      <div class="header-avatar">
+        <img src="${profilePic}" 
+             alt="Avatar de ${user.displayName}" 
+             onerror="this.src='assets/imagenes/LogoXH.png'; this.alt='Avatar';" />
+      </div>
+      <div class="header-username">${user.displayName}</div>
+      <button id="btn-logout" class="header-logout-btn">Cerrar Sesión</button>
+    </div>`;
+  document.getElementById('btn-logout').addEventListener('click', logout);
+};
+
+const login = () => {
+  auth.signInWithPopup(provider);
+};
+
+const logout = () => {
+  auth.signOut();
+};
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    showLogoutUI(user);
+  } else {
+    showLoginUI();
+  }
+});
+
+
 document.addEventListener('DOMContentLoaded', () => {
-  // API key y base URL de RAWG 
   const API_KEY = 'f8600f270c5a46cbbd3ee5e3324530c9'
   const API_BASE = 'https://api.rawg.io/api'
 
   const container = document.querySelector('.products.products--catalog .list');
-  if (!container) return; // Si no existe el contenedor, salir silenciosamente.
 
   const fetchJSON = async (url) => {
     const res = await fetch(url);
@@ -22,10 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }[m]))
   }
 
-  // Esta Funcion sirve para mostrar los juegos que jalamos de la API
   const posterCard = (game) => {
     const card = document.createElement('div')
     card.className = 'card'
+
+    const hue = getRandomHue();
+    card.style.setProperty('--card-hue', hue);
 
     const rating = game.rating || 'N/A'
     const platformsList = (game.platforms || []).map(p => (p.platform && p.platform.name) || p.name).filter(Boolean).join(', ')
@@ -41,9 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `
 
-    // Almacenar el id para usarlo despues para el modal
     card.dataset.gameId = game.id
-    // make card keyboard-accessible and open modal on click or Enter/Space
     card.tabIndex = 0
     const openIfAllowed = (e) => {
       if (e && e.type === 'click') {
@@ -63,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   
   const showGameModal = async (gameId, fallbackName) => {
-    // Use the Bootstrap modal markup present in catalogo.html
     const modalElement = document.getElementById('gameDetailModal');
     if (!modalElement) {
       console.warn('Bootstrap modal element not found');
@@ -73,8 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const bsModal = new bootstrap.Modal(modalElement);
     const modalTitle = document.getElementById('modal-game-title');
     const modalBody = document.getElementById('modal-game-body');
+    const modalFooter = modalElement.querySelector('.modal-footer');
 
-    // show loading state
     modalTitle.textContent = 'Cargando...';
     modalBody.innerHTML = `
       <div class="text-center">
@@ -82,6 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>`;
+      
+    if (modalFooter) {
+      modalFooter.querySelectorAll('.btn-store').forEach(btn => btn.remove());
+    }
 
     bsModal.show();
 
@@ -91,28 +147,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const imgSrc = data.background_image || data.background_image_additional || '';
       const synopsis = data.description_raw || (data.description ? data.description.replace(/<[^>]+>/g, '') : 'Sin descripción.');
-      const platforms = (data.platforms || []).map(p => (p.platform && p.platform.name) || p.name).filter(Boolean).join(', ');
-      const rating = data.rating || 'N/A';
-
+      
       modalTitle.textContent = data.name || fallbackName || '';
       modalBody.innerHTML = `
         <img src="${imgSrc}" class="img-fluid mb-3 modal-game-image" alt="${escapeHTML(data.name || fallbackName || '')}">
         <p>${escapeHTML(synopsis)}</p>
       `;
 
-      // add store buttons if available
-      const stores = (data.stores || []).map(s => (s.store && s.store.name) || s.name).filter(Boolean).map(s => s.toLowerCase());
-      const storeButtons = [];
-      const nameEncoded = encodeURIComponent(data.name || fallbackName || '');
-      if (stores.some(s => s.includes('steam'))) storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://store.steampowered.com/search/?term=${nameEncoded}">Ver en Steam</a>`);
-      if (stores.some(s => s.includes('epic'))) storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://www.epicgames.com/store/es-ES/browse?q=${nameEncoded}">Ver en Epic Games</a>`);
-      if (stores.some(s => s.includes('microsoft') || s.includes('xbox'))) storeButtons.push(`<a class="btn-store" target="_blank" rel="noopener" href="https://www.microsoft.com/search?q=${nameEncoded}">Ver en Microsoft Store</a>`);
+      if (modalFooter) {
+        const closeButton = modalFooter.querySelector('button[data-bs-dismiss="modal"]');
+        
+        const stores = (data.stores || []).map(s => (s.store && s.store.name) || s.name).filter(Boolean).map(s => s.toLowerCase());
+        const storeButtons = [];
+        
+        // --- ESTE ES EL CAMBIO (de encodedName a nameEncoded) ---
+        const nameEncoded = encodeURIComponent(data.name || fallbackName || '');
 
-      if (storeButtons.length) {
-        const actionsDiv = document.createElement('div');
-        actionsDiv.className = 'modal-actions mt-3';
-        actionsDiv.innerHTML = storeButtons.join('');
-        modalBody.appendChild(actionsDiv);
+        if (stores.some(s => s.includes('steam'))) {
+          storeButtons.push(`<a class="btn btn-primary btn-store" target="_blank" rel="noopener" href="https://store.steampowered.com/search/?term=${nameEncoded}">Ver en Steam</a>`);
+        }
+        if (stores.some(s => s.includes('epic'))) {
+          storeButtons.push(`<a class="btn btn-success btn-store" target="_blank" rel="noopener" href="https://www.epicgames.com/store/es-ES/browse?q=${nameEncoded}">Ver en Epic</a>`);
+        }
+        if (stores.some(s => s.includes('microsoft') || s.includes('xbox'))) {
+          storeButtons.push(`<a class="btn btn-info btn-store" target="_blank" rel="noopener" href="https://www.microsoft.com/search?q=${nameEncoded}">Ver en Microsoft</a>`);
+        }
+        // --- FIN DEL CAMBIO ---
+
+        if (storeButtons.length > 0 && closeButton) {
+          closeButton.insertAdjacentHTML('beforebegin', storeButtons.join(''));
+        }
       }
 
     } catch (err) {
@@ -121,19 +185,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
   const collectGames = async ({platformKeywords = [], count = 10, attempts = 6, mode = 'random'}) => {
     const collected = []
-    // géneros permitidos
     const allowedGenreKeywords = ['adventure', 'action', 'rpg', 'role-playing', 'role playing', 'sports', 'sport']
     const fromDate = '2020-01-01'
     const toDate = new Date().toISOString().split('T')[0]
 
     
     for (let attempt = 0; attempt < attempts && collected.length < count; attempt++) {
-      const randomPage = Math.floor(Math.random() * 15) + 1 // Va eligiendo los juegos desde la pagina 1 hasta la 15
-
-      // Construcción de parámetros diferentes según modo
+      const randomPage = Math.floor(Math.random() * 15) + 1 
       const baseParams = mode === 'quality'
         ? `&page=${randomPage}&page_size=40&dates=${fromDate},${toDate}&ordering=-rating`
         : `&page=${randomPage}&page_size=40&ordering=-released`
@@ -147,7 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
         continue
       }
 
-      // Filtrado por plataforma y géneros
       const matches = (data.results || []).filter(game => {
         const names = (game.platforms || []).map(p => (p.platform && p.platform.name) || p.name).filter(Boolean)
         const platformOk = names.some(n => {
@@ -165,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (!genresAllAllowed) return false;
 
-        // En modo 'quality' garantizamos fecha >= fromDate
         if (mode === 'quality') {
           if (!game.released) return false;
           const released = game.released.split('T')[0]
@@ -184,9 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return collected;
   };
 
-  (async () => {
+  const initPage = (async () => {
     try {
-      // Definición de cada sección del catálogo: id del DOM y keywords para plataforma
       const sections = [
         {id: 'list-novedades', name: 'novedades', platformKeywords: ['pc', 'playstation', 'ps5', 'xbox', 'nintendo'] , random: true},
         {id: 'list-pc', name: 'pc', platformKeywords: ['pc']},
@@ -197,17 +254,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       for (const sec of sections) {
         const el = document.getElementById(sec.id)
-        if (!el) continue; // si no existe el contenedor, pasar al siguiente
+        if (!el) continue; 
 
-        const desired = 10 // objetivo por fila
-        const attempts = 8 // cuántas páginas muestrear para intentar completar la lista
+        const desired = 10 
+        const attempts = 8 
 
         let collected;
         if (sec.random) {
-          // Novedades en modo aleatorio
           collected = await collectGames({platformKeywords: sec.platformKeywords, count: desired, attempts})
         } else {
-          // Filas por plataforma: pedir más resultados en 'quality'
           collected = await collectGames({platformKeywords: sec.platformKeywords, count: desired * 4, attempts, mode: 'quality'})
         }
 
@@ -224,7 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           toShow = collected.slice(0, desired)
         } else {
-          // Ordenar por rating desc, luego por cantidad de votos/reviews, luego por fecha
           collected.sort((a, b) => {
             const ra = a.rating || 0; const rb = b.rating || 0
             if (rb !== ra) return rb - ra
@@ -249,7 +303,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (err) {
       console.error(err)
-      container.innerHTML = '<p>No se pudieron cargar los juegos.</p>'
+      if (container) {
+        container.innerHTML = '<p>No se pudieron cargar los juegos.</p>'
+      }
     }
-  })()
-})
+  });
+
+  
+  // --- LÓGICA DE ANIMACIÓN DE SCROLL ---
+  const initScrollAnimation = () => {
+    const sections = document.querySelectorAll('.section-catalogo-user, .form-catalogo, .products, .container-5');
+    
+    const observerOptions = {
+      root: null, 
+      rootMargin: '0px',
+      threshold: 0.01 
+    };
+
+    const observerCallback = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('section-is-visible'); 
+          observer.unobserve(entry.target); 
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  };
+  initPage();
+  initScrollAnimation(); í
+
+});
