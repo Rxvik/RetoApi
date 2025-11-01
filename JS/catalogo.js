@@ -335,6 +335,109 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
   initPage();
-  initScrollAnimation(); í
+  initScrollAnimation();
+
+  // --- Typeahead (búsqueda rápida compartida) ---
+  function debounce(fn, wait){ let t; return function(...args){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,args), wait); }; }
+
+  function createSuggestBox(){
+    let box = document.querySelector('.search-suggestions');
+    if (!box){
+      box = document.createElement('div');
+      box.className = 'search-suggestions';
+      box.style.display = 'none';
+      document.body.appendChild(box);
+    }
+    return box;
+  }
+
+  function placeBoxUnderInput(box, input){
+    try{
+      const r = input.getBoundingClientRect();
+      box.style.width = Math.max(420, Math.floor(r.width)) + 'px';
+      box.style.left = Math.floor(r.left) + 'px';
+      box.style.top = Math.floor(r.bottom + 8) + 'px';
+    }catch(_e){}
+  }
+
+  async function searchGames(q){
+    const url = `${API_BASE}/games?search=${encodeURIComponent(q)}&page_size=8&key=${API_KEY}`;
+    try{
+      const res = await fetch(url);
+      if (!res.ok) return [];
+      const j = await res.json();
+      return (j.results||[]).map(g=>({ id: g.id, name: g.name, released: g.released, image: g.background_image }));
+    }catch(_e){ return []; }
+  }
+
+  function renderSuggestItems(box, results, state){
+    if (!results || !results.length){
+      box.innerHTML = '<div class="item" style="pointer-events:none"><span class="name">Sin resultados</span></div>';
+      return;
+    }
+    box.innerHTML = '';
+    results.forEach((g, idx)=>{
+      const item = document.createElement('div');
+      item.className = 'item' + (idx === state.activeIndex ? ' active' : '');
+      const img = document.createElement('img'); img.className = 'thumb'; img.src = g.image || ''; img.alt = '';
+      const meta = document.createElement('div'); meta.className = 'meta';
+      const name = document.createElement('div'); name.className = 'name'; name.textContent = g.name || '—';
+      const sub = document.createElement('div'); sub.className = 'sub'; sub.textContent = g.released ? new Date(g.released).getFullYear() : '';
+      meta.appendChild(name); meta.appendChild(sub);
+      item.appendChild(img); item.appendChild(meta);
+      item.addEventListener('mousedown', (ev)=>{ ev.preventDefault(); window.location.href = `busqueda.html?id=${g.id}`; });
+      box.appendChild(item);
+    });
+  }
+
+  function initTypeahead(){
+    const input = document.getElementById('buscador');
+    if (!input) return;
+    const searchBtn = (input.parentElement && (input.parentElement.querySelector('.ic-search') || input.parentElement.querySelector('.input__button__shadow')))
+                   || document.querySelector('.ic-search')
+                   || document.querySelector('.input__button__shadow');
+    const box = createSuggestBox();
+    const state = { results: [], activeIndex: -1, open: false };
+
+    function openBox(){ if (!state.results.length) return; placeBoxUnderInput(box, input); box.style.display=''; state.open=true; }
+    function closeBox(){ box.style.display='none'; state.open=false; state.activeIndex=-1; }
+
+    const doSearch = debounce(async ()=>{
+      const q = (input.value||'').trim();
+      if (q.length < 2){ state.results=[]; renderSuggestItems(box, state.results, state); closeBox(); return; }
+      const results = await searchGames(q);
+      state.results = results; state.activeIndex = results.length ? 0 : -1;
+      renderSuggestItems(box, state.results, state); openBox();
+    }, 250);
+
+    input.addEventListener('input', doSearch);
+    input.addEventListener('focus', ()=>{ if (state.results.length){ placeBoxUnderInput(box, input); openBox(); } });
+    input.addEventListener('keydown', (e)=>{
+      if (!state.open && (e.key==='ArrowDown'||e.key==='ArrowUp')) openBox();
+      switch(e.key){
+        case 'ArrowDown': e.preventDefault(); if (!state.results.length) return; state.activeIndex=(state.activeIndex+1)%state.results.length; renderSuggestItems(box, state.results, state); break;
+        case 'ArrowUp': e.preventDefault(); if (!state.results.length) return; state.activeIndex=(state.activeIndex-1+state.results.length)%state.results.length; renderSuggestItems(box, state.results, state); break;
+        case 'Enter':
+          if (state.open && state.activeIndex>=0 && state.results[state.activeIndex]){ e.preventDefault(); window.location.href = `busqueda.html?id=${state.results[state.activeIndex].id}`; }
+          else if ((input.value||'').trim().length){ window.location.href = 'busqueda.html?q=' + encodeURIComponent((input.value||'').trim()); }
+          break;
+        case 'Escape': closeBox(); break;
+      }
+    });
+
+    document.addEventListener('click', (ev)=>{ if (ev.target!==input && !box.contains(ev.target)) closeBox(); });
+    window.addEventListener('resize', ()=>{ if (state.open) placeBoxUnderInput(box, input); });
+    window.addEventListener('scroll', ()=>{ if (state.open) placeBoxUnderInput(box, input); }, { passive: true });
+
+    if (searchBtn){
+      searchBtn.addEventListener('click', ()=>{
+        const q = (input.value||'').trim();
+        if (state.open && state.activeIndex>=0 && state.results[state.activeIndex]) window.location.href = `busqueda.html?id=${state.results[state.activeIndex].id}`;
+        else if (q) window.location.href = 'busqueda.html?q=' + encodeURIComponent(q);
+      });
+    }
+  }
+
+  initTypeahead();
 
 });

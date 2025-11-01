@@ -65,6 +65,8 @@
       genres_slugs: (game.genres||[]).map(g => g.slug),
       platform_ids: (game.platforms||[]).map(p => p.platform && p.platform.id).filter(Boolean),
       rating: game.rating || game.metacritic/20 || 0,
+      ratings_breakdown: (game.ratings||[]),
+      ratings_count: game.ratings_count || 0,
       short: game.description_raw ? game.description_raw.split('. ').slice(0,2).join('. ') : (game.tags && game.tags[0] && game.tags[0].name) || '',
       description: game.description_raw || 'Sin descripción disponible.',
       banner: (game.background_image || game.background_image_additional),
@@ -74,6 +76,7 @@
       esrb: game.esrb_rating && game.esrb_rating.name || null,
       developers: (game.developers||[]).map(d => d.name),
       publishers: (game.publishers||[]).map(p => p.name),
+      tags: (game.tags||[]).map(t => t.name).filter(Boolean),
       website: game.website || null,
       stores: (game.stores||[]).map(s => ({
         name: (s.store && s.store.name) || 'Tienda',
@@ -89,8 +92,8 @@
   async function getGameData(){
     const id = params.get('id');
     const slug = params.get('slug');
-    // Por defecto, si no se especifica nada, usar el ejemplo "gears of war 3"
-    const q = params.get('q') || (!id && !slug ? 'gears of war 3' : null);
+    // Sin valor por defecto: solo por búsqueda o sugerencia
+    const q = params.get('q');
 
     if (!hasRawg) {
       throw new Error('No hay API key de RAWG configurada.');
@@ -260,6 +263,46 @@
     box.innerHTML = `<ul class="aside-list">${items.join('')}</ul>`;
   }
 
+  function renderRatingsBreakdown(data){
+    const card = document.getElementById('ratings-card');
+    const box = document.getElementById('ratings-breakdown');
+    if (!card || !box) return;
+    const items = Array.isArray(data.ratings_breakdown) ? data.ratings_breakdown : [];
+    const total = data.ratings_count || 0;
+    if (!items.length || total === 0){ card.style.display = 'none'; return; }
+    // Map RAWG titles to our labels/colors
+    const order = ['exceptional','recommended','meh','skip'];
+    const dict = {};
+    for (const r of items){ if (!r || !r.title) continue; dict[r.title.toLowerCase()] = r; }
+    const rows = [];
+    order.forEach(key => {
+      const row = dict[key];
+      const count = row ? row.count : 0;
+      const pct = total ? Math.round((count/total)*100) : 0;
+      const label = ({exceptional:'Excelente', recommended:'Bueno', meh:'Regular', skip:'Malo'})[key] || key;
+      const cls = `r-${key}`;
+      rows.push(`
+        <div class="aside-rating-row">
+          <div class="aside-rating-label">${label}</div>
+          <div class="aside-rating-bar"><span class="aside-rating-fill ${cls}" style="width:${pct}%"></span></div>
+          <div style="min-width:36px; font-size:12px; color:#bbb; text-align:right;">${pct}%</div>
+        </div>
+      `);
+    });
+    box.innerHTML = rows.join('');
+    card.style.display = '';
+  }
+
+  function renderTags(data){
+    const card = document.getElementById('tags-card');
+    const box = document.getElementById('tags-content');
+    if (!card || !box) return;
+    const tags = Array.isArray(data.tags) ? data.tags.slice(0, 10) : [];
+    if (!tags.length){ card.style.display = 'none'; return; }
+    box.innerHTML = tags.map(t => `<span class="badge me-1 mb-1">${t}</span>`).join('');
+    card.style.display = '';
+  }
+
   function renderStoresButtons(stores){
     const host = document.getElementById('hero-stores');
     if(!host) return;
@@ -406,6 +449,11 @@
   }
 
   async function init(){
+    // Restringir acceso directo: si no viene id/slug/q, redirigir al inicio
+    if (!params.get('id') && !params.get('slug') && !params.get('q')) {
+      window.location.replace('index.html');
+      return;
+    }
     setStatus('Cargando juego...', true);
     const data = await getGameData();
     if (!data){
@@ -469,6 +517,9 @@
 
   // Datos rápidos
     renderFacts(data);
+  // Opiniones y Etiquetas
+    renderRatingsBreakdown(data);
+    renderTags(data);
   // Dónde comprar como botones bajo el hero
   renderStoresButtons(data.stores);
 
