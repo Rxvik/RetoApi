@@ -12,7 +12,7 @@
   <body>
 
     <video class="hero-background-video" autoplay loop muted playsinline>
-      <source id="hero-video-source" src="assets/imagenes/Fondo2.mp4" type="video/mp4">
+      <source id="hero-video-source" src="assets/imagenes/FondoBGPrincipal.mp4" type="video/mp4">
       Tu navegador no soporta videos.
     </video>
 
@@ -24,8 +24,8 @@
         <h1 class="title">Catalogo de Juegos</h1>
         
         <nav class="navigation" aria-label="Navegación principal">
-          <span class="tab active">Inicio</span>
-          <a class="tab" href="catalogo.html">Catalogo</a>
+          <span class="tab active btn-glitch" data-text="Inicio">Inicio</span>
+          <a class="tab btn-glitch" href="catalogo.html" data-text="Catalogo">Catalogo</a>
           
             <input type="text" placeholder="Buscar Juego" id="buscador" class="textfield">
             <button class="ic-search" type="button" aria-label="Buscar">
@@ -55,7 +55,7 @@
           <div class="title-5">Descubre tu siguiente aventura</div>
           <p class="description-2">Explora una basta categoria de juegos seleccionados para ti.</p>
           <a class="button" href="catalogo.html">
-            <div class="primary"><div class="title-2">Buscar Juegos</div></div>
+            <div class="primary btn-glow"><div class="title-2">Buscar Juegos</div></div>
           </a>
         </div>
       </div>
@@ -69,55 +69,36 @@
         </div>
       </div>
 
-      <div class="reviews">
-        <div class="container-4"><div class="title-10">Reseñas de Jugadores</div></div>
-        <div class="list-2">
-          <div class="row">
-            <div class="card-2">
-              <div class="user">
-                <div class="avatar-2">
-                  <div class="avatar-3"></div>
-                  <div class="frame-2"><div class="title-11">Gamer1</div></div>
-                </div>
-                <div class="frame-3"></div>
-              </div>
-              <div class="title-12">Esta bien chingon</div>
-            </div>
-            <div class="card-2">
-              <div class="user">
-                <div class="avatar-2">
-                  <div class="avatar-3"></div>
-                  <div class="frame-2"><div class="title-11">Gamer2</div></div>
-                </div>
-                <div class="frame-4"></div>
-              </div>
-              <p class="title-12">Deje a mi familia solo para jugar este juego</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="card-2">
-              <div class="user">
-                <div class="avatar-2">
-                  <div class="avatar-3"></div>
-                  <div class="frame-2"><div class="title-11">Gamer3</div></div>
-                </div>
-                <div class="frame-5"></div>
-              </div>
-              <p class="title-12">Vendi a mi bebe para poder comprar una copia...no me arrepiento.</p>
-            </div>
-            <div class="card-2">
-              <div class="user">
-                <div class="avatar-2">
-                  <div class="avatar-3"></div>
-                  <div class="frame-2"><div class="title-11">Gamer4</div></div>
-                </div>
-                <div class="frame-6"></div>
-              </div>
-              <p class="title-12">10/10 y GOD, metan a Karely Ruiz</p>
-            </div>
-          </div>
-        </div>
+      <div class="featured-game-rotator">
+  <div class="div-wrapper">
+    <div class="title-6">Juego Destacado</div>
+  </div>
+  
+  <div class="rotator-content">
+    
+    <div id="featured-game-card" class="card">
+      <div class="image-container" style="height: 200px; background-color: #333;"></div>
+      <div class="text-content">
+          <div class="title-8">Cargando...</div>
+          <p class="subtitle">...</p>
       </div>
+    </div>
+    
+    <div id="featured-game-ratings">
+      <div class="rating-box">
+        <div class="rating-label">Rating de Usuarios</div>
+        <div class="rating-value">-.-</div>
+      </div>
+      <div class="rating-box">
+        <div class="rating-label">Metacritic</div>
+        <div class="rating-value metacritic">-.-</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+      
       <footer class="container-5" role="contentinfo">
         <p class="title-13">© 2025 SA. de CV.</p>
         <div class="title-14">Politicas de Privacidad</div>
@@ -148,6 +129,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    
     <script src="JS/index.js" defer></script>
     
   </body>

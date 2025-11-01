@@ -1,3 +1,5 @@
+// Contenido completo para JS/index.js
+
 const firebaseConfig = {
   apiKey: "AIzaSyAHXOnzpazOGRkSwuD9JGmU-jGw2TKcgXA",
   authDomain: "retoapi-ff801.firebaseapp.com",
@@ -15,15 +17,21 @@ const provider = new firebase.auth.GoogleAuthProvider();
 const authContainer = document.getElementById('auth-container');
 
 const showLoginUI = () => {
-  authContainer.innerHTML = `<button id="btn-google-login" class="header-login-btn">Iniciar sesión con Google</button>`;
+  authContainer.innerHTML = `<button id="btn-google-login" class="header-login-btn btn-glitch" data-text="Iniciar sesión con Google">Iniciar sesión con Google</button>`;
   document.getElementById('btn-google-login').addEventListener('click', login);
 };
 
 const showLogoutUI = (user) => {
+  const profilePic = user.photoURL || ''; 
+
   authContainer.innerHTML = `
     <div class="user-info-header">
       <div class="header-avatar">
-        <img src="${user.photoURL}" alt="Avatar de ${user.displayName}" />
+        <img src="${profilePic}" 
+             alt="Avatar de ${user.displayName}" 
+             
+             onerror="this.src='assets/imagenes/FedeObo.jpg'; this.alt='Avatar';" />
+             
       </div>
       <div class="header-username">${user.displayName}</div>
       <button id="btn-logout" class="header-logout-btn">Cerrar Sesión</button>
@@ -53,11 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const API_KEY = 'f8600f270c5a46cbbd3ee5e3324530c9';
   const API_BASE = 'https://api.rawg.io/api';
   
-  const rowsContainer = document.querySelector('.products .list');
+  // Contenedores para "Juegos Populares"
+  const popularContainer = document.querySelector('.products .list');
   const sectionTitle = document.querySelector('.products .title-6');
-
-  // Las referencias al video fueron eliminadas
   
+  // Contenedores para el ROTADOR
+  const rotatorCardContainer = document.getElementById('featured-game-card');
+  const rotatorRatingsContainer = document.getElementById('featured-game-ratings');
+  let rotatorGames = []; // Aquí guardaremos los juegos para rotar
+  let rotatorIndex = 0;
+
+  // Contenedores para el MODAL
   const modalElement = document.getElementById('gameDetailModal');
   const gameModal = new bootstrap.Modal(modalElement);
   const modalTitle = document.getElementById('modal-game-title');
@@ -65,24 +79,107 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   const init = async () => {
+    loadPopularGames();
+    initRotator();
+  };
+
+  // Carga los 5 juegos populares de siempre
+  const loadPopularGames = async () => {
     try {
       const randomPage = Math.floor(Math.random() * 50) + 1;
       const url = `${API_BASE}/games?key=${API_KEY}&page=${randomPage}&page_size=5&ordering=-rating`;
       const gamesData = await fetchJSON(url);
       
       sectionTitle.textContent = "Juegos Populares";
-
-      // La lógica para cargar el video fue eliminada
-      
-      renderRow(gamesData.results);
+      renderRow(gamesData.results, popularContainer);
 
     } catch (err) {
       console.error(err);
-      rowsContainer.innerHTML = "<p>No se pudieron cargar los juegos.</p>";
+      popularContainer.innerHTML = "<p>No se pudieron cargar los juegos populares.</p>";
     }
   };
 
-  // La función loadHeroVideo fue eliminada
+  // --- NUEVA LÓGICA DEL ROTADOR ---
+
+  // 1. Carga una lista de 20 juegos para usar en el rotador
+  const initRotator = async () => {
+    if (!rotatorCardContainer || !rotatorRatingsContainer) return; // No hacer nada si no existen
+
+    try {
+      const randomPage = Math.floor(Math.random() * 20) + 1;
+      // Pedimos 20 juegos de alta calificación
+      const url = `${API_BASE}/games?key=${API_KEY}&page=${randomPage}&page_size=20&ordering=-rating`;
+      const data = await fetchJSON(url);
+      rotatorGames = data.results.filter(g => g.background_image); // Guardamos solo juegos con imagen
+      
+      if (rotatorGames.length > 0) {
+        showNextGame(); // Mostramos el primer juego
+        setInterval(showNextGame, 5000); // Cambiamos cada 5 segundos
+      }
+    } catch (err) {
+      console.error("Error al iniciar el rotador:", err);
+      rotatorCardContainer.innerHTML = "<p>Error al cargar juego destacado.</p>";
+    }
+  };
+
+  // 2. Muestra el siguiente juego de la lista
+  const showNextGame = () => {
+    if (rotatorGames.length === 0) return;
+
+    // Obtiene el juego actual
+    const game = rotatorGames[rotatorIndex];
+
+    // Aplicamos animación de salida
+    rotatorCardContainer.classList.add('rotator-fade-out');
+    rotatorRatingsContainer.classList.add('rotator-fade-out');
+
+    // Esperamos que termine la animación de salida para cambiar el contenido
+    setTimeout(() => {
+      // --- Actualiza la tarjeta del juego ---
+      // Limpiamos la tarjeta anterior
+      rotatorCardContainer.innerHTML = '';
+      
+      // Creamos la nueva tarjeta (sin el tag de rating)
+      const genres = (game.genres || []).map(g => g.name).slice(0, 3).join(', ');
+      rotatorCardContainer.innerHTML = `
+        <div class="image-container">
+          <img class="image-3" src="${game.background_image}" alt="${escapeHTML(game.name)}">
+        </div>
+        <div class="text-content">
+          <div class="title-8">${escapeHTML(game.name)}</div>
+          <p class="subtitle">${escapeHTML(genres)}</p>
+        </div>
+      `;
+      // Añadimos el listener para el modal
+      rotatorCardContainer.addEventListener('click', () => showGameModal(game.slug));
+
+      // --- Actualiza las calificaciones ---
+      const userRating = game.rating ? game.rating.toFixed(1) : 'N/A';
+      const metacriticRating = game.metacritic || 'N/A';
+      
+      rotatorRatingsContainer.innerHTML = `
+        <div class="rating-box">
+          <div class="rating-label">Rating de Usuarios</div>
+          <div class="rating-value">${userRating}</div>
+        </div>
+        <div class="rating-box">
+          <div class="rating-label">Metacritic</div>
+          <div class="rating-value metacritic">${metacriticRating}</div>
+        </div>
+      `;
+
+      // Aplicamos animación de entrada
+      rotatorCardContainer.classList.remove('rotator-fade-out');
+      rotatorRatingsContainer.classList.remove('rotator-fade-out');
+
+    }, 300); // 300ms para la animación
+
+    // Avanzamos al siguiente juego
+    rotatorIndex = (rotatorIndex + 1) % rotatorGames.length;
+  };
+  
+  // --- FIN DE LA LÓGICA DEL ROTADOR ---
+
 
   const fetchJSON = async (url) => {
     const res = await fetch(url);
@@ -90,20 +187,21 @@ document.addEventListener('DOMContentLoaded', () => {
     return await res.json();
   };
 
-  const renderRow = (games) => {
-    rowsContainer.innerHTML = ''; 
-
+  // Esta función se usa para "Juegos Populares"
+  const renderRow = (games, containerElement) => {
+    containerElement.innerHTML = ''; 
     if (!games || games.length === 0) {
+      containerElement.innerHTML = "<p>No se encontraron juegos.</p>";
       return;
     }
-    
     games.forEach(game => {
       if (game.background_image) {
-        rowsContainer.appendChild(posterCard(game));
+        containerElement.appendChild(posterCard(game));
       }
     });
   };
 
+  // Esta tarjeta se usa para "Juegos Populares" (incluye rating en la esquina)
   const posterCard = (game) => {
     const card = document.createElement('div');
     card.className = 'card';
@@ -126,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return card;
   };
   
+  // Lógica del modal (sin cambios)
   const showGameModal = async (gameSlug) => {
     modalTitle.textContent = 'Cargando...';
     modalBody.innerHTML = `
@@ -135,7 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>`;
     
-    // Limpiamos botones de tiendas anteriores (por si acaso)
     const modalFooter = modalElement.querySelector('.modal-footer');
     if (modalFooter) {
       modalFooter.querySelectorAll('.btn-store').forEach(btn => btn.remove());
@@ -153,17 +251,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>${escapeHTML(gameDetails.description_raw)}</p>
       `;
 
-      // --- INICIO: Bloque de botones de tiendas ---
       if (modalFooter) {
-        // 2. Buscamos el botón de "Cerrar" para insertar antes de él
         const closeButton = modalFooter.querySelector('button[data-bs-dismiss="modal"]');
-        
-        // 3. Obtenemos la info de las tiendas desde la API
         const stores = (gameDetails.stores || []).map(s => (s.store && s.store.name) || s.name).filter(Boolean).map(s => s.toLowerCase());
         const storeButtons = [];
         const nameEncoded = encodeURIComponent(gameDetails.name || '');
 
-        // 4. Creamos los botones (usando clases de Bootstrap 'btn')
         if (stores.some(s => s.includes('steam'))) {
           storeButtons.push(`<a class="btn btn-primary btn-store" target="_blank" rel="noopener" href="https://store.steampowered.com/search/?term=${nameEncoded}">Ver en Steam</a>`);
         }
@@ -174,13 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
           storeButtons.push(`<a class="btn btn-info btn-store" target="_blank" rel="noopener" href="https://www.microsoft.com/search?q=${nameEncoded}">Ver en Microsoft</a>`);
         }
 
-        // 5. Insertamos los botones nuevos en el footer
         if (storeButtons.length > 0 && closeButton) {
-          // Insertamos cada botón (como HTML) antes del botón de cerrar
           closeButton.insertAdjacentHTML('beforebegin', storeButtons.join(''));
         }
       }
-      // --- FIN: Bloque de botones de tiendas ---
 
     } catch (err) {
       console.error(err);

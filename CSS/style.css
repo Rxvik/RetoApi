@@ -158,12 +158,24 @@ button:focus-visible {
   gap: 12px;
   margin-left: 20px;
 }
-.header-avatar img {
+
+/* Este es el CONTENEDOR del avatar */
+.header-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
+  border-radius: 50%;         /* Lo hacemos un círculo */
+  overflow: hidden;          /* <-- ESTA ES LA MAGIA: esconde el texto alt si se desborda */
+  background-color: #333;    /* Un fondo gris por si la imagen falla */
+  flex-shrink: 0;            /* Evita que el círculo se encoja */
 }
+
+/* Hacemos que la IMAGEN llene el contenedor */
+.header-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;         /* Esto ya lo tenías y es perfecto */
+}
+
 .header-username {
   font-weight: 500;
   font-size: 16px;
@@ -544,4 +556,295 @@ button:focus-visible {
 .modal-footer .btn-store {
   margin-right: 8px; /* Añade un espacio a la derecha de cada botón de tienda */
   color: #ffffff; /* Asegura texto blanco */
+}
+
+/* --- 12. ROTADOR DE JUEGOS DESTACADOS --- */
+.featured-game-rotator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px; /* Espacio entre el título y el contenido */
+  padding: 60px 40px;
+  width: 100%;
+  background-color: transparent; /* Fondo semi-transparente */
+  overflow: hidden; /* Evita desbordes durante la transición */
+}
+
+.rotator-content {
+  display: flex;
+  flex-direction: row; /* Elementos uno al lado del otro */
+  flex-wrap: wrap; /* Se apilan en pantallas pequeñas */
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 800px; /* Ancho máximo del contenedor */
+}
+
+/* El ID #featured-game-card usará los estilos de .card que ya existen */
+#featured-game-card {
+  flex: 1; /* Ocupa el espacio disponible */
+  min-width: 300px;
+  max-width: 350px;
+  transition: all 0.5s ease-in-out;
+}
+
+#featured-game-ratings {
+  flex: 1; /* Ocupa el espacio disponible */
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: all 0.5s ease-in-out;
+}
+
+.rating-box {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid #ffffff30;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.rating-box .rating-label {
+  font-size: 16px;
+  color: #ccc;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.rating-box .rating-value {
+  font-size: 48px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+/* Color especial para Metacritic */
+.rating-box .rating-value.metacritic {
+  color: #6c3; /* Verde Metacritic */
+}
+
+/* Pequeña animación de entrada */
+.rotator-fade-out {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* --- 13. ESTILO BOTÓN CON BRILLO (GLOW) --- */
+
+/* * Usamos .btn-glow. Esto sobreescribirá los estilos
+ * de .primary donde sea necesario.
+*/
+.btn-glow {
+  /* Variables de color del usuario */
+  --glow-color: rgb(217, 176, 255);
+  --glow-spread-color: rgba(191, 123, 255, 0.781);
+  --enhanced-glow-color: rgb(231, 206, 255);
+  --btn-color: rgb(100, 61, 136);
+
+  /* Reseteamos/Sobreescribimos .primary */
+  width: auto; /* Dejamos que el padding defina el ancho */
+  border: .25em solid var(--glow-color);
+  padding: 1em 3em;
+  color: var(--glow-color); /* Color del div (no visible) */
+  font-size: 15px;
+  font-weight: bold;
+  background-color: var(--btn-color);
+  border-radius: 1em;
+  outline: none;
+  box-shadow: 0 0 1em .25em var(--glow-color),
+        0 0 4em 1em var(--glow-spread-color),
+        inset 0 0 .75em .25em var(--glow-color);
+  text-shadow: 0 0 .5em var(--glow-color);
+  position: relative; /* Necesario para el ::after */
+  transition: all 0.3s;
+  
+  /* Aseguramos centrado (ya venía de .primary) */
+  align-items: center;
+  justify-content: center;
+}
+
+/* * El texto está en un <div>.title-2 DENTRO del .btn-glow.
+ * Necesitamos que el texto tome los colores correctos.
+ */
+.btn-glow .title-2 {
+    color: var(--glow-color); /* Color inicial del texto */
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: 0 0 .5em var(--glow-color);
+    transition: all 0.3s; /* Transición de color de texto */
+}
+
+.btn-glow::after {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  top: 120%;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--glow-spread-color);
+  filter: blur(2em);
+  opacity: .7;
+  transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
+}
+
+/* * El hover es en el <a> (clase .button), 
+ * pero queremos cambiar el .btn-glow (el div interior).
+*/
+.button:hover .btn-glow {
+  background-color: var(--glow-color);
+  box-shadow: 0 0 1em .25em var(--glow-color),
+        0 0 4em 2em var(--glow-spread-color),
+        inset 0 0 .75em .25em var(--glow-color);
+}
+
+/* El texto SÍ debe cambiar de color al hacer hover */
+.button:hover .btn-glow .title-2 {
+    color: var(--btn-color);
+    text-shadow: none; /* Quitamos el brillo del texto */
+}
+
+/* El active también es sobre el <a> */
+.button:active .btn-glow {
+  box-shadow: 0 0 0.6em .25em var(--glow-color),
+        0 0 2.5em 2em var(--glow-spread-color),
+        inset 0 0 .5em .25em var(--glow-color);
+}
+
+/* --- 14. ESTILO BOTÓN GLITCH HEADER --- */
+
+/* * Primero, reseteamos los estilos de los botones originales 
+ * para que no entren en conflicto con los nuevos.
+*/
+.navigation .tab,
+.navigation .header-login-btn {
+  border: none;
+  background: none;
+  padding: 0; /* El nuevo estilo .btn-glitch pondrá su propio padding */
+  text-shadow: none; /* Quitar sombras de texto antiguas */
+  font-size: 16px; 
+  font-weight: 500;
+  border-bottom: none !important; /* Quitar el borde .active */
+  margin-left: 0; /* Quitar el margen del botón de login */
+  line-height: 1.2;
+}
+
+/* * Tu código, adaptado a la clase .btn-glitch 
+ * y con padding/font-size ajustados para el header.
+*/
+.btn-glitch,
+.btn-glitch::after {
+  padding: 10px 25px; /* Reduje el padding lateral de 50px a 25px */
+  font-size: 16px; /* Reduje el font-size de 20px a 16px */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  background-color: transparent;
+  position: relative;
+  cursor: pointer; /* Añadido para los <span> y <a> */
+  text-decoration: none; /* Añadido para los <a> */
+}
+
+.btn-glitch::after {
+  --move1: inset(50% 50% 50% 50%);
+  --move2: inset(31% 0 40% 0);
+  --move3: inset(39% 0 15% 0);
+  --move4: inset(45% 0 40% 0);
+  --move5: inset(45% 0 6% 0);
+  --move6: inset(14% 0 61% 0);
+  clip-path: var(--move1);
+  
+  /* --- ESTA ES LA CORRECCIÓN CLAVE --- */
+  /* Lee el texto del atributo data-text que pusimos en el HTML */
+  content: attr(data-text); 
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+
+  /* Añadido para que el texto se alinee perfectamente */
+  padding: 10px 25px;
+  line-height: 1.2;
+}
+
+.btn-glitch:hover::after {
+  animation: glitch_4011 1s;
+  text-shadow: 10 10px 10px black;
+  animation-timing-function: steps(2, end);
+  text-shadow: -3px -3px 0px #1df2f0, 3px 3px 0px #E94BE8;
+  background-color: transparent;
+  border: 3px solid rgb(0, 255, 213);
+}
+
+.btn-glitch:hover {
+  text-shadow: -1px -1px 0px #1df2f0, 1px 1px 0px #E94BE8;
+}
+
+.btn-glitch:hover {
+  background-color: transparent;
+  border: 1px solid rgb(0, 255, 213);
+  box-shadow: 0px 10px 10px -10px rgb(0, 255, 213);
+}
+
+/* Tu animación @keyframes (va al final) */
+@keyframes glitch_4011 {
+  0% {
+    clip-path: var(--move1);
+    transform: translate(0px, -10px);
+  }
+
+  10% {
+    clip-path: var(--move2);
+    transform: translate(-10px, 10px);
+  }
+
+  20% {
+    clip-path: var(--move3);
+    transform: translate(10px, 0px);
+  }
+
+  30% {
+    clip-path: var(--move4);
+    transform: translate(-10px, 10px);
+  }
+
+  40% {
+    clip-path: var(--move5);
+    transform: translate(10px, -10px);
+  }
+
+  50% {
+    clip-path: var(--move6);
+    transform: translate(-10px, 10px);
+  }
+
+  60% {
+    clip-path: var(--move1);
+    transform: translate(10px, -10px);
+  }
+
+  70% {
+    clip-path: var(--move3);
+    transform: translate(-10px, 10px);
+  }
+
+  80% {
+    clip-path: var(--move2);
+    transform: translate(10px, -10px);
+  }
+
+  90% {
+    clip-path: var(--move4);
+    transform: translate(-10px, 10px);
+  }
+
+  100% {
+    clip-path: var(--move1);
+    transform: translate(0);
+  }
 }

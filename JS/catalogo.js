@@ -1,3 +1,61 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyAHXOnzpazOGRkSwuD9JGmU-jGw2TKcgXA",
+  authDomain: "retoapi-ff801.firebaseapp.com",
+  projectId: "retoapi-ff801",
+  storageBucket: "retoapi-ff801.firebasestorage.app",
+  messagingSenderId: "650992142854",
+  appId: "1:650992142854:web:ddf60d1f3d0ea540c79187",
+  measurementId: "G-0ZJQRJTF86"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
+
+const authContainer = document.getElementById('auth-container');
+
+// Esta función INCLUYE el 'btn-glitch' de tu petición anterior
+const showLoginUI = () => {
+  authContainer.innerHTML = `<button id="btn-google-login" class="header-login-btn btn-glitch" data-text="Iniciar sesión con Google">Iniciar sesión con Google</button>`;
+  document.getElementById('btn-google-login').addEventListener('click', login);
+};
+
+const showLogoutUI = (user) => {
+  const profilePic = user.photoURL || ''; 
+
+  authContainer.innerHTML = `
+    <div class="user-info-header">
+      <div class="header-avatar">
+        <img src="${profilePic}" 
+             alt="Avatar de ${user.displayName}" 
+             
+             onerror="this.src='assets/imagenes/FedeObo.jpg'; this.alt='Avatar';" />
+             
+      </div>
+      <div class="header-username">${user.displayName}</div>
+      <button id="btn-logout" class="header-logout-btn">Cerrar Sesión</button>
+    </div>`;
+  document.getElementById('btn-logout').addEventListener('click', logout);
+};
+
+const login = () => {
+  auth.signInWithPopup(provider);
+};
+
+const logout = () => {
+  auth.signOut();
+};
+
+// Este "listener" es la parte clave. 
+// Comprueba el estado de la sesión en CADA carga de página.
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    showLogoutUI(user);
+  } else {
+    showLoginUI();
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   // API key y base URL de RAWG 
   const API_KEY = 'f8600f270c5a46cbbd3ee5e3324530c9'
