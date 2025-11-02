@@ -4,7 +4,7 @@
 * {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-  font-family: "Roboto-Regular", Helvetica, sans-serif;
+  font-family: "Press Start 2P", Helvetica, sans-serif;
   color: #ffffff;
 }
 
@@ -70,7 +70,7 @@ button:focus-visible {
 
 .top-bar .title {
   flex: 1;
-  font-family: "Roboto-Medium", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 500;
   font-size: 28px;
   text-shadow: 0 1px 3px rgba(0,0,0,0.4);
@@ -80,7 +80,9 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  font-family: "Press Start 2P", Helvetica;
   gap: 20px;
+  font-size: 10px;
 }
 
 .tab {
@@ -104,7 +106,7 @@ button:focus-visible {
   all: unset;
   box-sizing: border-box;
   padding: 8px 12px;
-  font-family: "Roboto-Medium", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 500;
   font-size: 14px;
   color: #ffffff;
@@ -114,6 +116,7 @@ button:focus-visible {
   transition: background-color 0.2s, color 0.2s;
   white-space: nowrap;
   margin-left: 12px;
+  font-size: 12px;
 }
 .header-login-btn:hover,
 .header-logout-btn:hover {
@@ -126,6 +129,7 @@ button:focus-visible {
   align-items: center;
   gap: 12px;
   margin-left: 20px;
+  font-size: 12px;
 }
 
 
@@ -185,7 +189,7 @@ button:focus-visible {
 
 .text-wrapper {
   max-width: 520px;
-  font-family: "Roboto-Bold", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 700;
   font-size: 40px;
   text-align: center;
@@ -222,7 +226,7 @@ button:focus-visible {
 }
 
 .title-5 {
-  font-family: "Roboto-Bold", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 700;
   font-size: 40px;
   text-align: center;
@@ -258,7 +262,7 @@ button:focus-visible {
 
 .title-2 {
   width: fit-content;
-  font-family: "Roboto-Medium", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 500;
   color: #ffffff; 
   font-size: 16px;
@@ -286,7 +290,7 @@ button:focus-visible {
 
 .title-6 {
   width: 520px;
-  font-family: "Roboto-Bold", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 700;
   font-size: 40px;
   text-align: center;
@@ -317,6 +321,7 @@ button:focus-visible {
   cursor: pointer;
   transition: transform 0.2s;
 }
+
 .card:hover {
   transform: scale(1.03);
 }
@@ -344,7 +349,7 @@ button:focus-visible {
 }
 
 .text-2 { /* Rating */
-  font-family: "Roboto-Medium", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 500;
   font-size: 12px;
   line-height: 16px;
@@ -356,11 +361,13 @@ button:focus-visible {
   gap: 4px;
   padding: 12px;
   background-color: black; 
+  font-family: "Press Start 2P", Helvetica;
+  font-size: x-small;
 }
 
 .title-8 { /* Título del juego */
   font-weight: 400;
-  font-size: 16px;
+  font-size: 12px;
   line-height: 24px;
   white-space: nowrap;
   overflow: hidden;
@@ -369,7 +376,7 @@ button:focus-visible {
 
 .subtitle { /* Géneros */
   font-weight: 500;
-  font-size: 18px;
+  font-size: 12px;
   line-height: 28px;
   white-space: nowrap;
   overflow: hidden;
@@ -459,7 +466,7 @@ button:focus-visible {
 }
 
 .title-10 {
-  font-family: "Roboto-Bold", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 700;
   font-size: 40px;
   line-height: 48px;
@@ -522,6 +529,20 @@ button:focus-visible {
 }
 
 /* --- 9. FOOTER --- */
+.text-footer {
+  margin: 0; /* <-- ESTA ES LA CORRECCIÓN CLAVE */
+  
+  /* Estilos que ya tenías */
+  font-size: 16px;
+  font-weight: 400;
+  color: #ccc;
+  white-space: nowrap;
+  
+  /* Aprovechando la fuente que recomendamos */
+  font-family: "Press Start 2P", sans-serif;
+  font-size: 12px; /* Las fuentes pixel se ven mejor más pequeñas */
+}
+
 .container-5 {
   width: 100%;
   display: flex;
@@ -531,6 +552,7 @@ button:focus-visible {
   gap: 40px;
   padding: 40px;
   background-color: rgba(0, 0, 0, 0.4); 
+  font-family: "Press Start 2P", Helvetica;
 }
 
 .title-13, .title-14, .title-15, .title-16 {
@@ -538,6 +560,8 @@ button:focus-visible {
   font-weight: 400;
   color: #ccc;
   white-space: nowrap;
+  font-family: "Press Start 2P", Helvetica;
+  align-items: center;
 }
 
 /* --- 10. MODAL Y ANIMACIÓN --- */
@@ -640,6 +664,7 @@ button:focus-visible {
   color: #ccc;
   margin-bottom: 8px;
   text-transform: uppercase;
+  font-family: "Press Start 2P", Helvetica;
 }
 
 .rating-box .rating-value {
@@ -647,6 +672,7 @@ button:focus-visible {
   font-weight: 700;
   color: #ffffff;
   line-height: 1.1;
+  font-family: "Press Start 2P", Helvetica;
 }
 
 .rating-box .rating-value.metacritic {
@@ -740,6 +766,7 @@ button:focus-visible {
   border-bottom: none !important; 
   margin-left: 0; 
   line-height: 1.2;
+  font-size: 12px;
 }
 
 .btn-glitch,
@@ -904,6 +931,7 @@ button:focus-visible {
   background: #181818; 
   color: #ffffff;
   border-radius: 0 0 .7rem .7rem;
+  
 }
 
 .card:hover::after,
@@ -1088,4 +1116,108 @@ button:focus-visible {
 .input__container .shape {
   width: 20px;
   height: 20px;
+}
+
+/* --- 19. ANIMACIÓN DE CARGA (LOADER) --- */
+
+/* Contenedor para centrar la animación */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 150px;
+  padding: 20px 0;
+}
+
+/* Tu código de Uiverse.io */
+.wrapper {
+  width: 200px;
+  height: 60px;
+  position: relative;
+  z-index: 1;
+  align-items: center;
+
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  border-radius: 50%;
+  background-color: #fff;
+  left: 15%;
+  transform-origin: 50%;
+  animation: circle7124 .5s alternate infinite ease;
+}
+
+@keyframes circle7124 {
+  0% {
+    top: 60px;
+    height: 5px;
+    border-radius: 50px 50px 25px 25px;
+    transform: scaleX(1.7);
+  }
+
+  40% {
+    height: 20px;
+    border-radius: 50%;
+    transform: scaleX(1);
+  }
+
+  100% {
+    top: 0%;
+  }
+}
+
+.circle:nth-child(2) {
+  left: 45%;
+  animation-delay: .2s;
+}
+
+.circle:nth-child(3) {
+  left: auto;
+  right: 15%;
+  animation-delay: .3s;
+}
+
+.shadow {
+  width: 20px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.9);
+  position: absolute;
+  top: 62px;
+  transform-origin: 50%;
+  z-index: -1;
+  left: 15%;
+  filter: blur(1px);
+  animation: shadow046 .5s alternate infinite ease;
+}
+
+@keyframes shadow046 {
+  0% {
+    transform: scaleX(1.5);
+  }
+
+  40% {
+    transform: scaleX(1);
+    opacity: .7;
+  }
+
+  100% {
+    transform: scaleX(.2);
+    opacity: .4;
+  }
+}
+
+.shadow:nth-child(4) {
+  left: 45%;
+  animation-delay: .2s
+}
+
+.shadow:nth-child(5) {
+  left: auto;
+  right: 15%;
+  animation-delay: .3s;
 }

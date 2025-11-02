@@ -1,5 +1,19 @@
 const getRandomHue = () => Math.floor(Math.random() * 360);
 
+// --- 1. HTML DEL LOADER ---
+const loaderHTML = `
+<div class="loader-container">
+  <div class="wrapper">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="shadow"></div>
+    <div class="shadow"></div>
+    <div class="shadow"></div>
+  </div>
+</div>`;
+
+// --- 2. LÓGICA DE FIREBASE ---
 const firebaseConfig = {
   apiKey: "AIzaSyAHXOnzpazOGRkSwuD9JGmU-jGw2TKcgXA",
   authDomain: "retoapi-ff801.firebaseapp.com",
@@ -53,6 +67,7 @@ auth.onAuthStateChanged((user) => {
 });
 
 
+// --- 3. LÓGICA DE LA PÁGINA DE CATÁLOGO ---
 document.addEventListener('DOMContentLoaded', () => {
   const API_KEY = 'f8600f270c5a46cbbd3ee5e3324530c9'
   const API_BASE = 'https://api.rawg.io/api'
@@ -241,18 +256,23 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const initPage = (async () => {
-    try {
-      const sections = [
-        {id: 'list-novedades', name: 'novedades', platformKeywords: ['pc', 'playstation', 'ps5', 'xbox', 'nintendo'] , random: true},
-        {id: 'list-pc', name: 'pc', platformKeywords: ['pc']},
-        {id: 'list-ps5', name: 'ps5', platformKeywords: ['playstation', 'ps5']},
-        {id: 'list-nintendo', name: 'nintendo', platformKeywords: ['nintendo switch', 'nintendo']},
-        {id: 'list-xbox', name: 'xbox', platformKeywords: ['xbox']}
-      ]
+    const sections = [
+      {id: 'list-novedades', name: 'novedades', platformKeywords: ['pc', 'playstation', 'ps5', 'xbox', 'nintendo'] , random: true},
+      {id: 'list-pc', name: 'pc', platformKeywords: ['pc']},
+      {id: 'list-ps5', name: 'ps5', platformKeywords: ['playstation', 'ps5']},
+      {id: 'list-nintendo', name: 'nintendo', platformKeywords: ['nintendo switch', 'nintendo']},
+      {id: 'list-xbox', name: 'xbox', platformKeywords: ['xbox']}
+    ]
 
-      for (const sec of sections) {
-        const el = document.getElementById(sec.id)
-        if (!el) continue; 
+    // --- CORRECCIÓN IMPORTANTE ---
+    // Movemos el try/catch DENTRO del bucle
+    for (const sec of sections) {
+      const el = document.getElementById(sec.id)
+      if (!el) continue; 
+      
+      try {
+        // 1. Poner el loader
+        el.innerHTML = loaderHTML;
 
         const desired = 9 
         const attempts = 8 
@@ -304,18 +324,21 @@ document.addEventListener('DOMContentLoaded', () => {
           toShow = top.slice(0, desired)
         }
 
+        // 2. Limpiar el loader y mostrar tarjetas
         el.innerHTML = ''
         toShow.forEach(game => el.appendChild(posterCard(game)))
+      
+      } catch (err) {
+        // Si esta sección falla, muestra un error y continúa con la siguiente
+        console.error(`Error cargando la sección ${sec.id}:`, err);
+        if (el) {
+          el.innerHTML = `<p>Error al cargar la sección ${sec.name}.</p>`;
+        }
       }
-
-    } catch (err) {
-      console.error(err)
-      if (container) {
-        container.innerHTML = '<p>No se pudieron cargar los juegos.</p>'
-      }
-    }
+    } // Fin del bucle for
   });
-
+  
+  // --- 4. LÓGICA DE ANIMACIÓN DE SCROLL ---
   const initScrollAnimation = () => {
     const sections = document.querySelectorAll('.section-catalogo-user, .form-catalogo, .products, .container-5');
     
@@ -339,9 +362,9 @@ document.addEventListener('DOMContentLoaded', () => {
       observer.observe(section);
     });
   };
-  initPage();
-  initScrollAnimation();
-
+  
+  // --- 5. LÓGICA DE TYPEAHEAD (BÚSQUEDA) ---
+  // (Tu código de typeahead/búsqueda va aquí, sin cambios)
   function debounce(fn, wait){ let t; return function(...args){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,args), wait); }; }
 
   function createSuggestBox(){
@@ -398,8 +421,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('buscador');
     if (!input) return;
     const searchBtn = (input.parentElement && (input.parentElement.querySelector('.ic-search') || input.parentElement.querySelector('.input__button__shadow')))
-                   || document.querySelector('.ic-search')
-                   || document.querySelector('.input__button__shadow');
+                      || document.querySelector('.ic-search')
+                      || document.querySelector('.input__button__shadow');
     const box = createSuggestBox();
     const state = { results: [], activeIndex: -1, open: false };
 
@@ -442,6 +465,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // --- 6. INICIALIZACIÓN ---
+  initPage();
+  initScrollAnimation();
   initTypeahead();
 
 });

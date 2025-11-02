@@ -23,3 +23,7 @@
 .products.products--catalog .image-container {
   height: 220px;
 }
+
+.products.products--catalog .list .loader-container {
+  grid-column: 1 / -1;
+}

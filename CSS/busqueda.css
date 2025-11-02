@@ -20,12 +20,10 @@
 .page.page-detail {
   padding-top: 96px;
 }
-.page.page-detail .products,
-.page.page-detail .container-5 {
-  opacity: 1 !important;
-  transform: none !important;
-  transition: none !important;
-}
+/* ----- BLOQUE ELIMINADO ----- */
+/* Se eliminaron las reglas de 'opacity: 1 !important' 
+   que anulaban la animación de fade-in. */
+/* -------------------------- */
 .page.page-detail::before {
   content: "";
   position: fixed;
@@ -42,7 +40,8 @@
   padding-right: 24px;
 }
 
-/* Hero con fondo del juego */
+/* (El resto de tu CSS de busqueda.css va aquí, sin cambios) */
+/* ... (todo desde la línea 39 en adelante) ... */
 #game-hero {
   position: relative;
   background-size: cover;
@@ -128,7 +127,7 @@
 
 /* Cabecera del detalle (título, chips, rating) */
 .detail-title {
-  font-family: "Roboto-Bold", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 700;
   font-size: 40px;
   line-height: 50px;
@@ -147,7 +146,7 @@
   border-radius: 8px;
   padding: 8px 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-  font-family: "Roboto-Medium", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-size: 15px;
 }
 .detail-badges {
@@ -243,7 +242,7 @@
   padding: 16px;
 }
 .aside-title {
-  font-family: "Roboto-Bold", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-size: 16px;
   margin: 0 0 10px;
   color: #fff;
@@ -337,7 +336,7 @@
   align-items: center;
 }
 .detail-section-title {
-  font-family: "Roboto-Bold", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 700;
   font-size: 32px;
   line-height: 40px;
@@ -349,7 +348,7 @@
   max-width: 900px;
 }
 .detail-subsection-title {
-  font-family: "Roboto-Medium", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 500;
   font-size: 20px;
   line-height: 28px;
@@ -565,7 +564,7 @@
 }
 
 /* Responsive extra */
-@media (max-width: 768px){
+@media (max-width:  768px){
   .page-detail #game-hero .hero-right .detail-cover-wrapper {
     width: 100%;
     aspect-ratio: 4/3;
@@ -750,3 +749,11 @@
 .products--detail .list .card:nth-child(8n) {
   --card-hue: 240;
 }   /* índigo */
+
+.section-is-visible .products .list,
+.section-is-visible .card,
+.section-is-visible .detail-specs-box {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+}

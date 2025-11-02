@@ -1,3 +1,77 @@
+// --- 1. GLOBALES (Loader y Brillo) ---
+const getRandomHue = () => Math.floor(Math.random() * 360);
+
+const loaderHTML = `
+<div class="loader-container" style="padding: 60px 0;">
+  <div class="wrapper">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="shadow"></div>
+    <div class="shadow"></div>
+    <div class="shadow"></div>
+  </div>
+</div>`;
+
+// --- 2. LÓGICA DE FIREBASE (Autenticación) ---
+const firebaseConfig = {
+  apiKey: "AIzaSyAHXOnzpazOGRkSwuD9JGmU-jGw2TKcgXA",
+  authDomain: "retoapi-ff801.firebaseapp.com",
+  projectId: "retoapi-ff801",
+  storageBucket: "retoapi-ff801.firebasestorage.app",
+  messagingSenderId: "650992142854",
+  appId: "1:650992142854:web:ddf60d1f3d0ea540c79187",
+  measurementId: "G-0ZJQRJTF86"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
+
+const authContainer = document.getElementById('auth-container');
+
+const showLoginUI = () => {
+  if (authContainer) {
+    authContainer.innerHTML = `<button id="btn-google-login" class="header-login-btn btn-glitch" data-text="Iniciar sesión con Google">Iniciar sesión con Google</button>`;
+    document.getElementById('btn-google-login').addEventListener('click', login);
+  }
+};
+
+const showLogoutUI = (user) => {
+  if (authContainer) {
+    const profilePic = user.photoURL || ''; 
+    authContainer.innerHTML = `
+      <div class="user-info-header">
+        <div class="header-avatar">
+          <img src="${profilePic}" 
+               alt="Avatar de ${user.displayName}" 
+               onerror="this.src='assets/imagenes/LogoXH.png'; this.alt='Avatar';" />
+        </div>
+        <div class="header-username">${user.displayName}</div>
+        <button id="btn-logout" class="header-logout-btn">Cerrar Sesión</button>
+      </div>`;
+    document.getElementById('btn-logout').addEventListener('click', logout);
+  }
+};
+
+const login = () => {
+  auth.signInWithPopup(provider);
+};
+
+const logout = () => {
+  auth.signOut();
+};
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    showLogoutUI(user);
+  } else {
+    showLoginUI();
+  }
+});
+
+
+// --- 3. TU CÓDIGO DE busqueda.js (MODIFICADO) ---
 (function(){
   'use strict';
 
@@ -184,6 +258,9 @@
     }
     urls.forEach((src)=>{
       const card = el('div','card');
+      // --- MODIFICACIÓN: Añadimos brillo aleatorio ---
+      card.style.setProperty('--card-hue', getRandomHue());
+      
       const img = el('img','image-3', { src, alt: 'Captura del juego' });
       card.appendChild(img);
       container.appendChild(card);
@@ -398,6 +475,9 @@
       const card = document.createElement('div');
       card.className = 'card';
       
+      // --- MODIFICACIÓN: Añadimos brillo aleatorio ---
+      card.style.setProperty('--card-hue', getRandomHue());
+
       const rating = s.rating || 'N/A';
       
       // Obtener lista de plataformas
@@ -426,17 +506,6 @@
       }
       platformsList = platformsList || 'Plataformas no especificadas';
       
-      // Escapar HTML para seguridad
-      const escapeHTML = (str) => {
-        return (str || "").replace(/[&<>\"']/g, m => ({
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
-          "'": '&#39;'
-        }[m]));
-      };
-      
       card.innerHTML = `
         <a href="busqueda.html?id=${s.id}">
           <div class="image-container">
@@ -455,32 +524,23 @@
   }
 
   function renderSpecs(data){
-    // RAWG devuelve requisitos en game.platforms[].requirements
-    // Típicamente: {minimum: "texto", recommended: "texto"}
     const specsSection = $('#game-specs-section');
     const minWrapper = $('#specs-minimum-wrapper');
     const recWrapper = $('#specs-recommended-wrapper');
     const minBox = $('#specs-minimum');
     const recBox = $('#specs-recommended');
-
     let hasAny = false;
-
     if (data.platforms_data && data.platforms_data.length) {
-      // Buscar específicamente plataforma PC (id: 4 es PC en RAWG)
-      // También podemos verificar por nombre si contiene 'PC'
       for (const pf of data.platforms_data) {
         const platformName = pf.platform && pf.platform.name ? pf.platform.name.toLowerCase() : '';
         const platformId = pf.platform && pf.platform.id;
-        
-        // Filtrar solo PC (id 4 o nombre que contenga 'pc')
         if (platformId !== 4 && !platformName.includes('pc')) {
-          continue; // saltar si no es PC
+          continue; 
         }
-        
         const req = pf.requirements || (pf.platform && pf.platform.requirements);
         if (req) {
           if (req.minimum) {
-            minBox.textContent = req.minimum.replace(/<[^>]+>/g, ''); // strip HTML
+            minBox.textContent = req.minimum.replace(/<[^>]+>/g, ''); 
             minWrapper.style.display = '';
             hasAny = true;
           }
@@ -489,11 +549,10 @@
             recWrapper.style.display = '';
             hasAny = true;
           }
-          if (hasAny) break; // solo mostrar de una plataforma (primera con datos de PC)
+          if (hasAny) break; 
         }
       }
     }
-
     if (hasAny) {
       specsSection.style.display = '';
     } else {
@@ -504,8 +563,15 @@
   function setStatus(msg, busy=false){
     const s = $('#status');
     if (!s) return;
-    s.textContent = msg || '';
-    s.style.display = msg ? '' : 'none';
+    
+    // --- MODIFICACIÓN: Usamos el loaderHTML ---
+    if (busy && msg === 'Cargando juego...') {
+        s.innerHTML = loaderHTML; // Inyecta la animación
+    } else {
+        s.textContent = msg || ''; // Muestra texto normal
+    }
+
+    s.style.display = (msg || busy) ? '' : 'none';
     const hero = $('#game-hero');
     if (hero) hero.setAttribute('aria-busy', busy ? 'true' : 'false');
   }
@@ -525,21 +591,19 @@
 
     // Render básico
     $('#game-title').textContent = data.title || '—';
-  renderDescription(data.description || '');
+    renderDescription(data.description || '');
     const cover = $('#game-cover');
-    // Cover: usar la imagen del banner (fondo principal) para mantener consistencia
     if (data.banner) cover.src = data.banner;
     else if (data.cover) cover.src = data.cover;
     cover.alt = `Portada de ${data.title}`;
     const hero = $('#game-hero');
-    // Banner: elegir aleatoriamente una screenshot si hay; si no, usar banner de respaldo
     if (hero) {
       const shots = Array.isArray(data.gallery) ? data.gallery : [];
       const pick = shots.length ? shots[Math.floor(Math.random()*shots.length)] : (data.banner || data.cover || '');
       if (pick) hero.style.backgroundImage = `url('${pick}')`;
     }
 
-    // Rating debajo del título
+    // Rating
     const ratingBox = $('#game-rating-box');
     const ratingText = $('#game-rating-text');
     const r = Number(data.rating || 0).toFixed(1);
@@ -551,7 +615,6 @@
     }
 
     // Chips
-    // Formatear fecha a dd-mm-año
     let formattedDate = data.release || '—';
     if (data.release && data.release !== '—') {
       try {
@@ -562,30 +625,26 @@
           const year = dateObj.getFullYear();
           formattedDate = `${day}-${month}-${year}`;
         }
-      } catch(e) {
-        // si falla, mantener el formato original
-      }
+      } catch(e) { /* no-op */ }
     }
     $('#game-release').textContent = formattedDate;
     $('#game-platforms').textContent = renderChips(data.platforms);
     $('#game-genres').textContent = renderChips(data.genres);
 
-  // Galería en ruleta (estilo productos)
-  const galleryRail = document.getElementById('gallery-rail');
-  if (galleryRail) renderGalleryRail(galleryRail, data.gallery);
+    // Galería
+    const galleryRail = document.getElementById('gallery-rail');
+    if (galleryRail) renderGalleryRail(galleryRail, data.gallery);
 
-    // Especificaciones del sistema
+    // Specs
     renderSpecs(data);
 
-  // Datos rápidos
+    // Datos rápidos
     renderFacts(data);
-  // Opiniones y Etiquetas
     renderRatingsBreakdown(data);
     renderTags(data);
-  // Dónde comprar como botones bajo el hero
-  renderStoresButtons(data.stores);
+    renderStoresButtons(data.stores);
 
-    // Sugeridos en ruleta: varias estrategias para garantizar resultados
+    // Sugeridos
     let suggestions = await fetchSuggestions(data.id);
     if(!suggestions || !suggestions.length){
       const s1 = await fetchGameSeries(data.id);
@@ -605,7 +664,7 @@
     setStatus('', false);
   }
 
-  // ---------------------- Typeahead de búsqueda (solo en busqueda.html) ----------------------
+  // --- Typeahead de búsqueda ---
   function debounce(fn, wait){ let t; return function(...args){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,args), wait); }; }
 
   function createSuggestBox(){
@@ -658,7 +717,9 @@
   function initTypeahead(){
     const input = document.getElementById('buscador');
     if (!input) return;
-    const searchBtn = (input.parentElement && input.parentElement.querySelector('.ic-search')) || document.querySelector('.ic-search');
+    const searchBtn = (input.parentElement && (input.parentElement.querySelector('.ic-search') || input.parentElement.querySelector('.input__button__shadow')))
+                      || document.querySelector('.ic-search')
+                      || document.querySelector('.input__button__shadow');
     const box = createSuggestBox();
     const state = { results: [], activeIndex: -1, open: false };
 
@@ -703,5 +764,46 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', ()=>{ init(); initTypeahead(); });
+  // --- 4. FUNCIÓN DE ANIMACIÓN DE SCROLL ---
+  const initScrollAnimation = () => {
+    // --- CAMBIO CLAVE: Apuntamos a los IDs y clases CORRECTOS ---
+    const sections = document.querySelectorAll(
+        '#game-hero, #game-main-content, #game-specs-section, #gallery-section, #suggestions-section, .container-5'
+    );
+    
+    const observerOptions = {
+      root: null, 
+      rootMargin: '0px',
+      threshold: 0.01 // Se activa en cuanto 1% (o 1px) sea visible
+    };
+
+    const observerCallback = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('section-is-visible'); 
+          observer.unobserve(entry.target); 
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  };
+
+
+  // --- 5. INICIALIZACIÓN ---
+  // --- CAMBIO CLAVE: Hacemos el listener asíncrono ---
+  document.addEventListener('DOMContentLoaded', async ()=>{ 
+    // 1. Hacemos que init() sea 'await' para que espere
+    await init(); 
+    
+    // 2. initTypeahead() se ejecuta después
+    initTypeahead(); 
+    
+    // 3. initScrollAnimation() se ejecuta al final,
+    //    cuando la página ya tiene contenido y altura.
+    initScrollAnimation();
+  });
 })();
