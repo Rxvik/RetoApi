@@ -128,10 +128,10 @@
 
 /* Cabecera del detalle (título, chips, rating) */
 .detail-title {
-  font-family: "Roboto-Bold", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 700;
   font-size: 40px;
-  line-height: 50px;
+  line-height: 48px; /* igual a title-6 en index */
   color: #fff;
   margin: 0;
   word-wrap: break-word;
@@ -337,14 +337,14 @@
   align-items: center;
 }
 .detail-section-title {
-  font-family: "Roboto-Bold", Helvetica;
+  font-family: "Press Start 2P", Helvetica;
   font-weight: 700;
-  font-size: 32px;
-  line-height: 40px;
+  font-size: 40px;   /* igual a title-6 */
+  line-height: 48px; /* igual a title-6 */
   color: #fff;
   margin-bottom: 24px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 2px solid rgba(255,255,255,0.25); /* restaurar línea inferior */
   width: 100%;
   max-width: 900px;
 }

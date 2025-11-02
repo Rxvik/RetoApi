@@ -445,6 +445,50 @@ button:focus-visible {
   .search-suggestions .name { font-size: 15px; line-height: 20px; line-clamp: 2; -webkit-line-clamp: 2; }
 }
 
+/* --- RESPONSIVE: HEADER, HERO, LISTAS, ROTADOR, FOOTER (Index) --- */
+@media (max-width: 991.98px) {
+  .top-bar { height: auto; padding: 12px 20px; align-items: flex-start; }
+  .navigation { flex-wrap: wrap; gap: 12px; justify-content: flex-start; width: 100%; }
+  .top-bar .title { font-size: 22px; }
+  .input__container { max-width: 360px; flex: 1 1 100%; }
+}
+
+@media (max-width: 768px) {
+  .frame { padding-top: 80px; }
+  .div { height: auto; padding: 40px 20px; }
+  .text-wrapper { font-size: 32px; line-height: 40px; }
+  .description { font-size: 14px; line-height: 22px; }
+  .section-2 { gap: 32px; padding: 40px 20px; }
+  .products { gap: 32px; padding: 40px 20px; }
+  .list { gap: 20px; }
+  .title-6 { font-size: 28px; line-height: 36px; width: auto; }
+  #featured-game-ratings .rating-box { padding: 14px; }
+  .rating-box .rating-value { font-size: 36px; }
+}
+
+@media (max-width: 576px) {
+  .navigation { gap: 10px; }
+  .input__container { max-width: 100%; width: 100%; }
+  .list { gap: 16px; }
+  .card { min-width: 300px; max-width: 350px; }
+  #featured-game-card { min-width: 300px; max-width: 350px; }
+  .container-5 { gap: 20px; padding: 24px; }
+  .title-13, .title-14, .title-15, .title-16 { font-size: 12px; }
+  .modal-game-image { height: 220px; }
+}
+
+/* Layout responsivo natural para "Juegos Populares" (index):
+   que vaya reduciendo columnas (5→4→3→2→1) sin adelgazar tarjetas. */
+@media (max-width: 991.98px) {
+  .products:not(.products--catalog):not(.products--detail):not(.products--gallery) .card { flex: 0 1 300px; }
+}
+@media (max-width: 768px) {
+  .products:not(.products--catalog):not(.products--detail):not(.products--gallery) .card { flex: 0 1 320px; }
+}
+@media (max-width: 576px) {
+  .products:not(.products--catalog):not(.products--detail):not(.products--gallery) .card { flex: 1 1 100%; min-width: 260px; max-width: 520px; }
+}
+
 /* --- 8. SECCIÓN "RESEÑAS" --- */
 .reviews {
   display: flex;
