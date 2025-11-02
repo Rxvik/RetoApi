@@ -160,7 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const stores = (data.stores || []).map(s => (s.store && s.store.name) || s.name).filter(Boolean).map(s => s.toLowerCase());
         const storeButtons = [];
         
-        // --- ESTE ES EL CAMBIO (de encodedName a nameEncoded) ---
         const nameEncoded = encodeURIComponent(data.name || fallbackName || '');
 
         if (stores.some(s => s.includes('steam'))) {
@@ -172,7 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stores.some(s => s.includes('microsoft') || s.includes('xbox'))) {
           storeButtons.push(`<a class="btn btn-info btn-store" target="_blank" rel="noopener" href="https://www.microsoft.com/search?q=${nameEncoded}">Ver en Microsoft</a>`);
         }
-        // --- FIN DEL CAMBIO ---
 
         if (storeButtons.length > 0 && closeButton) {
           closeButton.insertAdjacentHTML('beforebegin', storeButtons.join(''));
@@ -185,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const collectGames = async ({platformKeywords = [], count = 10, attempts = 6, mode = 'random'}) => {
+  const collectGames = async ({platformKeywords = [], count = 9, attempts = 6, mode = 'random'}) => {
     const collected = []
     const allowedGenreKeywords = ['adventure', 'action', 'rpg', 'role-playing', 'role playing', 'sports', 'sport']
     const fromDate = '2020-01-01'
@@ -256,12 +254,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById(sec.id)
         if (!el) continue; 
 
-        const desired = 10 
+        const desired = 9 
         const attempts = 8 
 
         let collected;
         if (sec.random) {
-          collected = await collectGames({platformKeywords: sec.platformKeywords, count: desired, attempts})
+          if (sec.id === 'list-novedades' || sec.name === 'novedades') {
+            collected = await collectGames({platformKeywords: sec.platformKeywords, count: desired * 4, attempts, mode: 'quality'})
+          } else {
+            collected = await collectGames({platformKeywords: sec.platformKeywords, count: desired, attempts})
+          }
         } else {
           collected = await collectGames({platformKeywords: sec.platformKeywords, count: desired * 4, attempts, mode: 'quality'})
         }
@@ -273,11 +275,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let toShow = []
         if (sec.random) {
-          for (let i = collected.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [collected[i], collected[j]] = [collected[j], collected[i]];
+          if (sec.id === 'list-novedades' || sec.name === 'novedades') {
+            collected.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+            toShow = collected.slice(0, desired);
+          } else {
+            for (let i = collected.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [collected[i], collected[j]] = [collected[j], collected[i]];
+            }
+            toShow = collected.slice(0, desired)
           }
-          toShow = collected.slice(0, desired)
         } else {
           collected.sort((a, b) => {
             const ra = a.rating || 0; const rb = b.rating || 0
@@ -309,8 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  
-  // --- LÓGICA DE ANIMACIÓN DE SCROLL ---
   const initScrollAnimation = () => {
     const sections = document.querySelectorAll('.section-catalogo-user, .form-catalogo, .products, .container-5');
     
@@ -337,7 +342,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initPage();
   initScrollAnimation();
 
-  // --- Typeahead (búsqueda rápida compartida) ---
   function debounce(fn, wait){ let t; return function(...args){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,args), wait); }; }
 
   function createSuggestBox(){

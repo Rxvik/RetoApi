@@ -43,25 +43,11 @@
           <a class="tab active btn-glitch" href="catalogo.html" data-text="Catalogo">Catalogo</a>
 
           <div class="input__container">
-            <input
-              type="text"
-              placeholder="Buscar Juego"
-              id="buscador"
-              class="input__search"
-            />
+            <input type="text" placeholder="Buscar Juego" id="buscador" class="input__search"/>
 
-            <button
-              class="input__button__shadow"
-              type="button"
-              aria-label="Buscar"
-            >
-              <img
-                class="shape"
-                src="assets/imagenes/lupa.png"
-                alt="Icono de búsqueda"
-              />
+            <button class="input__button__shadow" type="button" aria-label="Buscar">
+              <img class="shape" src="assets/imagenes/lupa.png" alt="Icono de búsqueda"/>
             </button>
-
             <div class="shadow__input"></div>
           </div>
 
@@ -69,60 +55,10 @@
         </nav>
       </header>
 
-      <main class="form-catalogo">
-        <div class="title-wrapper">
-          <div class="title-2">Filtros y Búsqueda</div>
-        </div>
-
-        <div class="filters-layout">
-          <section class="filters-left">
-            <div class="row">
-              <div class="selection-2">
-                <div class="title-3">Plataforma</div>
-                <div class="chip-group">
-                  <div class="chip"><div class="text-2">XBOX</div></div>
-                  <div class="chip"><div class="text-2">PC</div></div>
-                  <div class="chip"><div class="text-2">PS5</div></div>
-                  <div class="chip"><div class="text-2">Nintendo Switch</div></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="selection-2">
-                <div class="title-3">Género</div>
-                <div class="chip-group">
-                  <div class="chip"><div class="text-2">Aventura</div></div>
-                  <div class="chip"><div class="text-2">Acción</div></div>
-                  <div class="chip"><div class="text-2">Deportes</div></div>
-                  <div class="chip"><div class="text-2">RPG</div></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="selection-2">
-                <div class="title-3">Ordenar por</div>
-                <div class="chip-group">
-                  <div class="chip"><div class="text-2">Últimos Lanzamientos</div></div>
-                  <div class="chip"><div class="text-2">Mejor Calificados</div></div>
-                </div>
-              </div>
-            </div>
-
-            <button class="button" type="button">
-              <div class="primary-2">
-                <div class="div">Aplicar Filtros</div>
-              </div>
-            </button>
-          </section>
-        </div>
-      </main>
-
       <!-- Secciones de productos -->
       <div class="products products--catalog" data-section="novedades">
         <div class="div-wrapper">
-          <div class="title-6">Novedades/Filtrado</div>
+          <div class="title-6">Novedades</div>
         </div>
         <div class="list" id="list-novedades"></div>
       </div>
@@ -156,13 +92,7 @@
     </div>
 
     <!-- Modal de Detalles del Juego -->
-    <div
-      class="modal"
-      id="gameDetailModal"
-      tabindex="-1"
-      aria-labelledby="gameDetailModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal" id="gameDetailModal" tabindex="-1" aria-labelledby="gameDetailModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -184,11 +114,7 @@
           </div>
 
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Cerrar
             </button>
           </div>
