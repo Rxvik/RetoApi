@@ -99,8 +99,6 @@ button:focus-visible {
   font-weight: 700;
 }
 
-
-/* Estilos de Login (Firebase) */
 .header-login-btn,
 .header-logout-btn {
   all: unset;
@@ -108,7 +106,7 @@ button:focus-visible {
   padding: 8px 12px;
   font-family: "Press Start 2P", Helvetica;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   color: #ffffff;
   border: 1px solid #ffffff;
   border-radius: 8px;
@@ -116,8 +114,8 @@ button:focus-visible {
   transition: background-color 0.2s, color 0.2s;
   white-space: nowrap;
   margin-left: 12px;
-  font-size: 12px;
 }
+
 .header-login-btn:hover,
 .header-logout-btn:hover {
   background-color: #ffffff;
@@ -530,17 +528,15 @@ button:focus-visible {
 
 /* --- 9. FOOTER --- */
 .text-footer {
-  margin: 0; /* <-- ESTA ES LA CORRECCIÓN CLAVE */
+  margin: 0; 
   
-  /* Estilos que ya tenías */
   font-size: 16px;
   font-weight: 400;
   color: #ccc;
   white-space: nowrap;
-  
-  /* Aprovechando la fuente que recomendamos */
+
   font-family: "Press Start 2P", sans-serif;
-  font-size: 12px; /* Las fuentes pixel se ven mejor más pequeñas */
+  font-size: 12px; 
 }
 
 .container-5 {
@@ -1120,7 +1116,6 @@ button:focus-visible {
 
 /* --- 19. ANIMACIÓN DE CARGA (LOADER) --- */
 
-/* Contenedor para centrar la animación */
 .loader-container {
   display: flex;
   justify-content: center;
@@ -1130,7 +1125,6 @@ button:focus-visible {
   padding: 20px 0;
 }
 
-/* Tu código de Uiverse.io */
 .wrapper {
   width: 200px;
   height: 60px;

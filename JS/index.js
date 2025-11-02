@@ -1,8 +1,5 @@
-// Contenido completo para JS/index.js
-
 const getRandomHue = () => Math.floor(Math.random() * 360);
 
-// --- NUEVO: Definimos el HTML del loader ---
 const loaderHTML = `
 <div class="loader-container">
   <div class="wrapper">
@@ -101,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadPopularGames = async () => {
     if (!popularContainer) return; 
 
-    // --- CAMBIO AQUÍ: Usamos el loaderHTML ---
     popularContainer.innerHTML = loaderHTML;
     
     try {
@@ -260,14 +256,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }[m]));
   };
 
-  // --- LÓGICA DE ANIMACIÓN DE SCROLL ---
   const initScrollAnimation = () => {
     const sections = document.querySelectorAll('.frame, .section-2, .products, .featured-game-rotator, .container-5');
     
     const observerOptions = {
       root: null, 
       rootMargin: '0px',
-      threshold: 0.01 // Se activa en cuanto 1% (o 1px) sea visible
+      threshold: 0.01 
     };
 
     const observerCallback = (entries, observer) => {
@@ -284,10 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
       observer.observe(section);
     });
   };
-  // --- FIN DE LA LÓGICA DE ANIMACIÓN ---
 
 
-  // Llama a las funciones iniciales
   init();
   initScrollAnimation(); 
 

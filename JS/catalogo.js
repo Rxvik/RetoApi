@@ -264,14 +264,11 @@ document.addEventListener('DOMContentLoaded', () => {
       {id: 'list-xbox', name: 'xbox', platformKeywords: ['xbox']}
     ]
 
-    // --- CORRECCIÓN IMPORTANTE ---
-    // Movemos el try/catch DENTRO del bucle
     for (const sec of sections) {
       const el = document.getElementById(sec.id)
       if (!el) continue; 
       
       try {
-        // 1. Poner el loader
         el.innerHTML = loaderHTML;
 
         const desired = 9 
@@ -324,18 +321,16 @@ document.addEventListener('DOMContentLoaded', () => {
           toShow = top.slice(0, desired)
         }
 
-        // 2. Limpiar el loader y mostrar tarjetas
         el.innerHTML = ''
         toShow.forEach(game => el.appendChild(posterCard(game)))
       
       } catch (err) {
-        // Si esta sección falla, muestra un error y continúa con la siguiente
         console.error(`Error cargando la sección ${sec.id}:`, err);
         if (el) {
           el.innerHTML = `<p>Error al cargar la sección ${sec.name}.</p>`;
         }
       }
-    } // Fin del bucle for
+    } 
   });
   
   // --- 4. LÓGICA DE ANIMACIÓN DE SCROLL ---
@@ -364,7 +359,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   
   // --- 5. LÓGICA DE TYPEAHEAD (BÚSQUEDA) ---
-  // (Tu código de typeahead/búsqueda va aquí, sin cambios)
   function debounce(fn, wait){ let t; return function(...args){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,args), wait); }; }
 
   function createSuggestBox(){

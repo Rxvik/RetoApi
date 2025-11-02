@@ -1,85 +1,9 @@
-// --- 1. GLOBALES (Loader y Brillo) ---
-const getRandomHue = () => Math.floor(Math.random() * 360);
-
-const loaderHTML = `
-<div class="loader-container" style="padding: 60px 0;">
-  <div class="wrapper">
-    <div class="circle"></div>
-    <div class="circle"></div>
-    <div class="circle"></div>
-    <div class="shadow"></div>
-    <div class="shadow"></div>
-    <div class="shadow"></div>
-  </div>
-</div>`;
-
-// --- 2. LÓGICA DE FIREBASE (Autenticación) ---
-const firebaseConfig = {
-  apiKey: "AIzaSyAHXOnzpazOGRkSwuD9JGmU-jGw2TKcgXA",
-  authDomain: "retoapi-ff801.firebaseapp.com",
-  projectId: "retoapi-ff801",
-  storageBucket: "retoapi-ff801.firebasestorage.app",
-  messagingSenderId: "650992142854",
-  appId: "1:650992142854:web:ddf60d1f3d0ea540c79187",
-  measurementId: "G-0ZJQRJTF86"
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
-
-const authContainer = document.getElementById('auth-container');
-
-const showLoginUI = () => {
-  if (authContainer) {
-    authContainer.innerHTML = `<button id="btn-google-login" class="header-login-btn btn-glitch" data-text="Iniciar sesión con Google">Iniciar sesión con Google</button>`;
-    document.getElementById('btn-google-login').addEventListener('click', login);
-  }
-};
-
-const showLogoutUI = (user) => {
-  if (authContainer) {
-    const profilePic = user.photoURL || ''; 
-    authContainer.innerHTML = `
-      <div class="user-info-header">
-        <div class="header-avatar">
-          <img src="${profilePic}" 
-               alt="Avatar de ${user.displayName}" 
-               onerror="this.src='assets/imagenes/LogoXH.png'; this.alt='Avatar';" />
-        </div>
-        <div class="header-username">${user.displayName}</div>
-        <button id="btn-logout" class="header-logout-btn">Cerrar Sesión</button>
-      </div>`;
-    document.getElementById('btn-logout').addEventListener('click', logout);
-  }
-};
-
-const login = () => {
-  auth.signInWithPopup(provider);
-};
-
-const logout = () => {
-  auth.signOut();
-};
-
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    showLogoutUI(user);
-  } else {
-    showLoginUI();
-  }
-});
-
-
-// --- 3. TU CÓDIGO DE busqueda.js (MODIFICADO) ---
 (function(){
   'use strict';
 
-  // Configuración RAWG integrada (alinea con catalogo.js)
   const API_BASE = 'https://api.rawg.io/api';
   const API_KEY = 'f8600f270c5a46cbbd3ee5e3324530c9';
 
-  // Utilidades
   const $ = (sel, ctx=document) => ctx.querySelector(sel);
   const el = (tag, className, attrs={}) => {
     const e = document.createElement(tag);
@@ -158,15 +82,14 @@ auth.onAuthStateChanged((user) => {
         url: s.url || (s.store && s.store.domain ? ('https://' + s.store.domain) : null)
       })),
       gallery,
-      reviews: [], // RAWG no tiene reseñas públicas fáciles; dejaremos vacío
-      platforms_data: game.platforms || [] // Guardar plataformas completas para specs
+      reviews: [], 
+      platforms_data: game.platforms || [] 
     };
   }
 
   async function getGameData(){
     const id = params.get('id');
     const slug = params.get('slug');
-    // Sin valor por defecto: solo por búsqueda o sugerencia
     const q = params.get('q');
 
     if (!hasRawg) {
@@ -187,7 +110,6 @@ auth.onAuthStateChanged((user) => {
     return values.join(', ');
   }
 
-  // Formatear descripción en párrafos y con toggle "Ver más"
   function escapeHTML(s){
     return (s || "").replace(/[&<>"']/g, m => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -198,10 +120,8 @@ auth.onAuthStateChanged((user) => {
     if (!text) return [];
     const t = String(text).replace(/\r\n?/g, '\n').trim();
     if (!t) return [];
-    // Primero intenta por doble salto de línea (párrafos reales)
     let paras = t.split(/\n{2,}/).map(s => s.trim()).filter(Boolean);
     if (paras.length > 1) return paras;
-    // Si es un bloque largo sin saltos, agrupar por oraciones (~3 por párrafo)
     const sentences = t.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
     if (sentences.length <= 3) return [t];
     const grouped = [];
@@ -258,9 +178,6 @@ auth.onAuthStateChanged((user) => {
     }
     urls.forEach((src)=>{
       const card = el('div','card');
-      // --- MODIFICACIÓN: Añadimos brillo aleatorio ---
-      card.style.setProperty('--card-hue', getRandomHue());
-      
       const img = el('img','image-3', { src, alt: 'Captura del juego' });
       card.appendChild(img);
       container.appendChild(card);
@@ -286,7 +203,6 @@ auth.onAuthStateChanged((user) => {
     } catch(_e){ return []; }
   }
 
-  // Fallback 1: por géneros (usar slugs correctos)
   async function fetchSuggestionsByGenres(genresSlugs){
     const slugs = Array.isArray(genresSlugs) ? genresSlugs.filter(Boolean) : [];
     if(!slugs.length) return [];
@@ -309,7 +225,6 @@ auth.onAuthStateChanged((user) => {
     } catch(_e){ return []; }
   }
 
-  // Fallback 2: juegos de la misma serie
   async function fetchGameSeries(gameId){
     try{
       const r = await fetch(`${API_BASE}/games/${gameId}/game-series?page_size=10&key=${API_KEY}`);
@@ -329,7 +244,6 @@ auth.onAuthStateChanged((user) => {
     } catch(_e){ return []; }
   }
 
-  // Fallback 3: por plataformas (IDs), juegos mejor valorados
   async function fetchByPlatformIds(platformsData){
     const ids = (platformsData||[]).map(p => p.platform && p.platform.id).filter(Boolean);
     if(!ids.length) return [];
@@ -375,10 +289,9 @@ auth.onAuthStateChanged((user) => {
       const gOverlap = intersectCount(baseGenres, it.genres_slugs||[]);
       const pOverlap = intersectCount(basePlatforms, it.platform_ids||[]);
       const y = yearFromDateStr(it.released);
-      const yPenalty = (baseYear && y) ? Math.min(2, Math.abs(baseYear - y) / 6) : 0; // small penalty for far years
-      const imgBonus = it.image ? 0.2 : -1; // penalize items without image
+      const yPenalty = (baseYear && y) ? Math.min(2, Math.abs(baseYear - y) / 6) : 0; 
+      const imgBonus = it.image ? 0.2 : -1; 
       const score = gOverlap*3 + pOverlap*1 - yPenalty + imgBonus;
-      // Require at least some genre overlap to consider it "related"
       if (gOverlap >= 1) scored.push({ ...it, _score: score });
     }
     scored.sort((a,b)=> b._score - a._score);
@@ -409,7 +322,6 @@ auth.onAuthStateChanged((user) => {
     const items = Array.isArray(data.ratings_breakdown) ? data.ratings_breakdown : [];
     const total = data.ratings_count || 0;
     if (!items.length || total === 0){ card.style.display = 'none'; return; }
-    // Map RAWG titles to our labels/colors
     const order = ['exceptional','recommended','meh','skip'];
     const dict = {};
     for (const r of items){ if (!r || !r.title) continue; dict[r.title.toLowerCase()] = r; }
@@ -475,9 +387,6 @@ auth.onAuthStateChanged((user) => {
       const card = document.createElement('div');
       card.className = 'card';
       
-      // --- MODIFICACIÓN: Añadimos brillo aleatorio ---
-      card.style.setProperty('--card-hue', getRandomHue());
-
       const rating = s.rating || 'N/A';
       
       // Obtener lista de plataformas
@@ -506,6 +415,16 @@ auth.onAuthStateChanged((user) => {
       }
       platformsList = platformsList || 'Plataformas no especificadas';
       
+      const escapeHTML = (str) => {
+        return (str || "").replace(/[&<>\"']/g, m => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[m]));
+      };
+      
       card.innerHTML = `
         <a href="busqueda.html?id=${s.id}">
           <div class="image-container">
@@ -529,14 +448,18 @@ auth.onAuthStateChanged((user) => {
     const recWrapper = $('#specs-recommended-wrapper');
     const minBox = $('#specs-minimum');
     const recBox = $('#specs-recommended');
+
     let hasAny = false;
+
     if (data.platforms_data && data.platforms_data.length) {
       for (const pf of data.platforms_data) {
         const platformName = pf.platform && pf.platform.name ? pf.platform.name.toLowerCase() : '';
         const platformId = pf.platform && pf.platform.id;
+ 
         if (platformId !== 4 && !platformName.includes('pc')) {
-          continue; 
+          continue; // saltar si no es PC
         }
+        
         const req = pf.requirements || (pf.platform && pf.platform.requirements);
         if (req) {
           if (req.minimum) {
@@ -553,6 +476,7 @@ auth.onAuthStateChanged((user) => {
         }
       }
     }
+
     if (hasAny) {
       specsSection.style.display = '';
     } else {
@@ -563,21 +487,13 @@ auth.onAuthStateChanged((user) => {
   function setStatus(msg, busy=false){
     const s = $('#status');
     if (!s) return;
-    
-    // --- MODIFICACIÓN: Usamos el loaderHTML ---
-    if (busy && msg === 'Cargando juego...') {
-        s.innerHTML = loaderHTML; // Inyecta la animación
-    } else {
-        s.textContent = msg || ''; // Muestra texto normal
-    }
-
-    s.style.display = (msg || busy) ? '' : 'none';
+    s.textContent = msg || '';
+    s.style.display = msg ? '' : 'none';
     const hero = $('#game-hero');
     if (hero) hero.setAttribute('aria-busy', busy ? 'true' : 'false');
   }
 
   async function init(){
-    // Restringir acceso directo: si no viene id/slug/q, redirigir al inicio
     if (!params.get('id') && !params.get('slug') && !params.get('q')) {
       window.location.replace('index.html');
       return;
@@ -591,7 +507,7 @@ auth.onAuthStateChanged((user) => {
 
     // Render básico
     $('#game-title').textContent = data.title || '—';
-    renderDescription(data.description || '');
+  renderDescription(data.description || '');
     const cover = $('#game-cover');
     if (data.banner) cover.src = data.banner;
     else if (data.cover) cover.src = data.cover;
@@ -603,7 +519,7 @@ auth.onAuthStateChanged((user) => {
       if (pick) hero.style.backgroundImage = `url('${pick}')`;
     }
 
-    // Rating
+    // Rating debajo del título
     const ratingBox = $('#game-rating-box');
     const ratingText = $('#game-rating-text');
     const r = Number(data.rating || 0).toFixed(1);
@@ -614,7 +530,6 @@ auth.onAuthStateChanged((user) => {
       ratingBox.style.display = 'none';
     }
 
-    // Chips
     let formattedDate = data.release || '—';
     if (data.release && data.release !== '—') {
       try {
@@ -625,26 +540,28 @@ auth.onAuthStateChanged((user) => {
           const year = dateObj.getFullYear();
           formattedDate = `${day}-${month}-${year}`;
         }
-      } catch(e) { /* no-op */ }
+      } catch(e) {
+      }
     }
     $('#game-release').textContent = formattedDate;
     $('#game-platforms').textContent = renderChips(data.platforms);
     $('#game-genres').textContent = renderChips(data.genres);
 
-    // Galería
-    const galleryRail = document.getElementById('gallery-rail');
-    if (galleryRail) renderGalleryRail(galleryRail, data.gallery);
+  const galleryRail = document.getElementById('gallery-rail');
+  if (galleryRail) renderGalleryRail(galleryRail, data.gallery);
 
-    // Specs
+    // Especificaciones del sistema
     renderSpecs(data);
 
-    // Datos rápidos
+  // Datos rápidos
     renderFacts(data);
+  // Opiniones y Etiquetas
     renderRatingsBreakdown(data);
     renderTags(data);
-    renderStoresButtons(data.stores);
+  // Dónde comprar como botones bajo el hero
+  renderStoresButtons(data.stores);
 
-    // Sugeridos
+    // Sugeridos en ruleta: varias estrategias para garantizar resultados
     let suggestions = await fetchSuggestions(data.id);
     if(!suggestions || !suggestions.length){
       const s1 = await fetchGameSeries(data.id);
@@ -664,7 +581,6 @@ auth.onAuthStateChanged((user) => {
     setStatus('', false);
   }
 
-  // --- Typeahead de búsqueda ---
   function debounce(fn, wait){ let t; return function(...args){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,args), wait); }; }
 
   function createSuggestBox(){
@@ -717,9 +633,7 @@ auth.onAuthStateChanged((user) => {
   function initTypeahead(){
     const input = document.getElementById('buscador');
     if (!input) return;
-    const searchBtn = (input.parentElement && (input.parentElement.querySelector('.ic-search') || input.parentElement.querySelector('.input__button__shadow')))
-                      || document.querySelector('.ic-search')
-                      || document.querySelector('.input__button__shadow');
+    const searchBtn = (input.parentElement && input.parentElement.querySelector('.ic-search')) || document.querySelector('.ic-search');
     const box = createSuggestBox();
     const state = { results: [], activeIndex: -1, open: false };
 
@@ -764,46 +678,5 @@ auth.onAuthStateChanged((user) => {
     }
   }
 
-  // --- 4. FUNCIÓN DE ANIMACIÓN DE SCROLL ---
-  const initScrollAnimation = () => {
-    // --- CAMBIO CLAVE: Apuntamos a los IDs y clases CORRECTOS ---
-    const sections = document.querySelectorAll(
-        '#game-hero, #game-main-content, #game-specs-section, #gallery-section, #suggestions-section, .container-5'
-    );
-    
-    const observerOptions = {
-      root: null, 
-      rootMargin: '0px',
-      threshold: 0.01 // Se activa en cuanto 1% (o 1px) sea visible
-    };
-
-    const observerCallback = (entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('section-is-visible'); 
-          observer.unobserve(entry.target); 
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    sections.forEach(section => {
-      observer.observe(section);
-    });
-  };
-
-
-  // --- 5. INICIALIZACIÓN ---
-  // --- CAMBIO CLAVE: Hacemos el listener asíncrono ---
-  document.addEventListener('DOMContentLoaded', async ()=>{ 
-    // 1. Hacemos que init() sea 'await' para que espere
-    await init(); 
-    
-    // 2. initTypeahead() se ejecuta después
-    initTypeahead(); 
-    
-    // 3. initScrollAnimation() se ejecuta al final,
-    //    cuando la página ya tiene contenido y altura.
-    initScrollAnimation();
-  });
+  document.addEventListener('DOMContentLoaded', ()=>{ init(); initTypeahead(); });
 })();
